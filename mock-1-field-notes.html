@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI at FirstLine — Field Notes</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Open Sans', sans-serif; }
+  .serif { font-family: 'Source Serif 4', Georgia, serif; }
+  .dateline { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; }
+  .dropcap::first-letter { font-family: 'Source Serif 4', Georgia, serif; font-size: 4.5rem; font-weight: 700; float: left; line-height: 0.85; padding-right: 0.5rem; padding-top: 0.4rem; }
+  .col-rule { column-rule: 1px solid #e7e5e4; }
+</style>
+</head>
+<body class="bg-stone-50 text-stone-900">
+
+  <!-- Masthead -->
+  <header class="bg-white border-b-[3px] border-double border-stone-900">
+    <div class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-[#002f60]"></div>
+        <div>
+          <div class="dateline text-stone-500">FirstLine Schools · New Orleans</div>
+          <div class="serif text-3xl font-bold leading-none mt-0.5">AI at FirstLine</div>
+        </div>
+      </div>
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="#work" class="hover:text-[#e47727]">Our Work</a>
+        <a href="#taskforce" class="hover:text-[#e47727]">Task Force</a>
+        <a href="#tools" class="hover:text-[#e47727]">Tools</a>
+        <a href="#grants" class="hover:text-[#e47727]">Mini-Grants</a>
+        <a href="#families" class="hover:text-[#e47727]">For Families</a>
+        <a href="#" class="ml-3 text-xs px-3 py-1.5 border border-stone-300 hover:bg-stone-100">Staff sign in →</a>
+      </nav>
+    </div>
+    <div class="bg-stone-900 text-stone-300">
+      <div class="max-w-6xl mx-auto px-6 py-2 flex justify-between dateline">
+        <span>Vol. 1 · Issue 01 · May 2026</span>
+        <span class="hidden md:block">A record of how we're approaching AI at FirstLine</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Editor's Note -->
+  <section class="bg-white border-b border-stone-200">
+    <div class="max-w-6xl mx-auto px-6 py-14 md:py-20 grid md:grid-cols-12 gap-12">
+      <div class="md:col-span-8">
+        <div class="dateline text-[#e47727] mb-5">From the Editor</div>
+        <h1 class="serif text-5xl md:text-6xl font-bold leading-[1.05] mb-7">
+          We're learning to use AI well at FirstLine. Carefully. In the open.
+        </h1>
+        <div class="serif text-lg text-stone-800 leading-relaxed space-y-4">
+          <p class="dropcap">In April, we convened a Task Force to think carefully about AI at FirstLine. Sixteen people — teachers, leaders, parents, network staff — sat down to take on four questions, one at a time. I joined them in May as Chief Innovation Officer.</p>
+          <p>This page is where we share what we're working on, what we're learning, and what we change as a result. We won't manufacture activity to look busier. We won't celebrate before there's something to celebrate. And we'll publish the things that don't work, too.</p>
+        </div>
+        <div class="serif mt-7 text-stone-700">
+          <div class="font-semibold">— Scott Shirey</div>
+          <div class="text-sm text-stone-500 dateline mt-1">Chief Innovation Officer · FirstLine Schools</div>
+        </div>
+      </div>
+      <aside class="md:col-span-4 border-l border-stone-200 pl-8">
+        <div class="dateline text-stone-500 mb-3">In this issue</div>
+        <ol class="serif space-y-3 text-stone-800 list-decimal pl-5">
+          <li>Four questions the Task Force is taking on</li>
+          <li>Our approach, in four words</li>
+          <li>The sixteen people doing this work</li>
+          <li>One approved tool, on purpose</li>
+          <li>Ten mini-grants, $1,000 each, open this year</li>
+          <li>A short note for families</li>
+        </ol>
+        <div class="dateline text-stone-500 mt-7 mb-2">In future issues</div>
+        <p class="serif text-sm text-stone-700">Bright spots from classrooms. Pilot reports — including the misses. A daily AI-in-education news brief, written by an agent, reviewed by a human.</p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Four Pillars / Our Work -->
+  <section id="work" class="py-14 bg-stone-50">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="border-b border-stone-300 pb-3 mb-10">
+        <div class="dateline text-[#e47727] mb-1">Section 01</div>
+        <h2 class="serif text-3xl md:text-4xl font-bold">Four Questions the Task Force Is Taking On</h2>
+        <p class="serif text-stone-600 mt-2">Clarity and coherence over volume. One pillar at a time, worked well.</p>
+      </div>
+
+      <div class="divide-y divide-stone-200">
+        <div class="py-7 grid md:grid-cols-12 gap-6 items-baseline">
+          <div class="md:col-span-2 dateline text-[#e47727]">Pillar 01 · Drafting</div>
+          <div class="md:col-span-8">
+            <h3 class="serif text-2xl font-bold mb-2">A Vision for AI at FirstLine</h3>
+            <p class="serif text-stone-700 leading-relaxed">What we believe about AI and student learning. The frame that shapes every decision downstream.</p>
+          </div>
+          <div class="md:col-span-2 text-right">
+            <span class="dateline text-amber-900 bg-amber-100 border border-amber-200 px-2 py-1">In progress</span>
+          </div>
+        </div>
+
+        <div class="py-7 grid md:grid-cols-12 gap-6 items-baseline">
+          <div class="md:col-span-2 dateline text-[#e47727]">Pillar 02 · Drafting</div>
+          <div class="md:col-span-8">
+            <h3 class="serif text-2xl font-bold mb-2">Student Usage Policy</h3>
+            <p class="serif text-stone-700 leading-relaxed">When and how students use AI in our classrooms. How we protect their work, their data, and their learning.</p>
+          </div>
+          <div class="md:col-span-2 text-right">
+            <span class="dateline text-amber-900 bg-amber-100 border border-amber-200 px-2 py-1">In progress</span>
+          </div>
+        </div>
+
+        <div class="py-7 grid md:grid-cols-12 gap-6 items-baseline">
+          <div class="md:col-span-2 dateline text-[#e47727]">Pillar 03 · Drafting</div>
+          <div class="md:col-span-8">
+            <h3 class="serif text-2xl font-bold mb-2">Staff Usage Policy</h3>
+            <p class="serif text-stone-700 leading-relaxed">How teachers, leaders, and staff use AI in their work. What we expect, what we encourage, what we don't allow.</p>
+          </div>
+          <div class="md:col-span-2 text-right">
+            <span class="dateline text-amber-900 bg-amber-100 border border-amber-200 px-2 py-1">In progress</span>
+          </div>
+        </div>
+
+        <div class="py-7 grid md:grid-cols-12 gap-6 items-baseline">
+          <div class="md:col-span-2 dateline text-[#e47727]">Pillar 04 · Started</div>
+          <div class="md:col-span-8">
+            <h3 class="serif text-2xl font-bold mb-2">Enterprise Software Selection</h3>
+            <p class="serif text-stone-700 leading-relaxed">Which AI platforms FirstLine uses. <strong>Gemini Enterprise</strong> approved as the foundation in May. More under review as needs emerge.</p>
+          </div>
+          <div class="md:col-span-2 text-right">
+            <span class="dateline text-green-900 bg-green-100 border border-green-200 px-2 py-1">Started</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Approach (pull quote) -->
+  <section class="py-20 bg-[#002f60] text-white">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="dateline text-[#e47727] mb-5">Our Approach</div>
+      <p class="serif text-3xl md:text-4xl leading-snug font-light">
+        "AI will play a significant role in how we teach, learn, and work. We have both an opportunity and a responsibility to approach this thoughtfully, responsibly, and with a clear focus on impact for students and staff."
+      </p>
+      <div class="dateline mt-7 text-stone-300">— Sabrina, in announcing the Task Force, April 2026</div>
+      <div class="grid md:grid-cols-4 gap-6 mt-10 pt-8 border-t border-white/20">
+        <div>
+          <div class="serif text-2xl font-bold text-[#e47727] mb-1">Thoughtful</div>
+          <p class="text-sm text-stone-300">Aligned to our instructional vision and priorities.</p>
+        </div>
+        <div>
+          <div class="serif text-2xl font-bold text-[#e47727] mb-1">Clear</div>
+          <p class="text-sm text-stone-300">About what we believe regarding student learning.</p>
+        </div>
+        <div>
+          <div class="serif text-2xl font-bold text-[#e47727] mb-1">Grounded</div>
+          <p class="text-sm text-stone-300">In the experience of teachers, leaders, and families.</p>
+        </div>
+        <div>
+          <div class="serif text-2xl font-bold text-[#e47727] mb-1">Disciplined</div>
+          <p class="text-sm text-stone-300">In decisions that will impact our schools.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Task Force -->
+  <section id="taskforce" class="py-14 bg-white">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="border-b border-stone-300 pb-3 mb-10">
+        <div class="dateline text-[#e47727] mb-1">Section 02</div>
+        <h2 class="serif text-3xl md:text-4xl font-bold">The Sixteen at the Table</h2>
+        <p class="serif text-stone-600 mt-2">A cross-functional group from across our network, schools, and families. Convened April 2026.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-10">
+        <div>
+          <div class="dateline text-[#002f60] mb-4 pb-2 border-b border-stone-200">Network Team</div>
+          <ul class="space-y-4 serif">
+            <li><div class="font-bold text-lg leading-tight">Scott Shirey</div><div class="text-sm text-stone-600">Chief Innovation Officer</div></li>
+            <li><div class="font-bold text-lg leading-tight">Shanda Gentry</div><div class="text-sm text-stone-600">Chief Academic Officer</div></li>
+            <li><div class="font-bold text-lg leading-tight">Rebekah Cain</div><div class="text-sm text-stone-600">Chief Operating Officer</div></li>
+            <li><div class="font-bold text-lg leading-tight">Caitlin O'Dell</div><div class="text-sm text-stone-600">Director of Data and Analytics</div></li>
+            <li><div class="font-bold text-lg leading-tight">Joe Barberot</div><div class="text-sm text-stone-600">Director of IT</div></li>
+            <li><div class="font-bold text-lg leading-tight">Rameisha Johnson</div><div class="text-sm text-stone-600">Family Engagement Manager</div></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="dateline text-[#002f60] mb-4 pb-2 border-b border-stone-200">Schools</div>
+          <ul class="space-y-4 serif">
+            <li><div class="font-bold text-lg leading-tight">Elle Jupiter</div><div class="text-sm text-stone-600">Assistant Principal · Ashe</div></li>
+            <li><div class="font-bold text-lg leading-tight">Kaloni James</div><div class="text-sm text-stone-600">5th Grade ELA · Ashe</div></li>
+            <li><div class="font-bold text-lg leading-tight">Brian Duplantier</div><div class="text-sm text-stone-600">SPED Coordinator · Green</div></li>
+            <li><div class="font-bold text-lg leading-tight">Grant Harris</div><div class="text-sm text-stone-600">7th Grade Math · Green</div></li>
+            <li><div class="font-bold text-lg leading-tight">Justin Burkett</div><div class="text-sm text-stone-600">SPED Coordinator · LHA</div></li>
+            <li><div class="font-bold text-lg leading-tight">Tina Imbriano</div><div class="text-sm text-stone-600">Primary SPED · LHA</div></li>
+            <li><div class="font-bold text-lg leading-tight">Malcolm Eustace</div><div class="text-sm text-stone-600">Principal · Wheatley</div></li>
+            <li><div class="font-bold text-lg leading-tight">Lauren Briggs</div><div class="text-sm text-stone-600">5th Grade ELA · Wheatley</div></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="dateline text-[#e47727] mb-4 pb-2 border-b border-stone-200">Family Representatives</div>
+          <ul class="space-y-4 serif">
+            <li><div class="font-bold text-lg leading-tight">Brenda Codallo</div><div class="text-sm text-stone-600">Parent</div></li>
+            <li><div class="font-bold text-lg leading-tight">Lakechia Variste</div><div class="text-sm text-stone-600">Parent</div></li>
+          </ul>
+          <div class="mt-8 pt-5 border-t border-stone-200 serif text-stone-700 italic">
+            Family voice shapes our work from the start, not after the fact.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Approved This Month / Tool Feature -->
+  <section id="tools" class="py-14 bg-stone-50 border-y border-stone-200">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="border-b border-stone-300 pb-3 mb-10">
+        <div class="dateline text-[#e47727] mb-1">Section 03 · Approved this month</div>
+        <h2 class="serif text-3xl md:text-4xl font-bold">One Tool, On Purpose</h2>
+        <p class="serif text-stone-600 mt-2">We add tools deliberately, one at a time, when there's a clear reason. Tool decisions sit with the CIO.</p>
+      </div>
+
+      <article class="grid md:grid-cols-12 gap-8">
+        <div class="md:col-span-3">
+          <div class="aspect-square bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-sm flex items-center justify-center font-bold text-white text-6xl serif">G</div>
+        </div>
+        <div class="md:col-span-9">
+          <div class="dateline text-stone-500 mb-2">Approved · May 2026</div>
+          <h3 class="serif text-3xl font-bold mb-2">Gemini Enterprise</h3>
+          <p class="serif text-stone-600 mb-4">Google Cloud · No-code AI agent platform</p>
+          <p class="serif text-lg text-stone-800 leading-relaxed mb-6">For staff and admin use. Drafting emails, summarizing documents, brainstorming, conducting research, automating repetitive tasks. Connects securely to Google Workspace.</p>
+          <div class="grid sm:grid-cols-3 gap-6 pt-5 border-t border-stone-300">
+            <div>
+              <div class="dateline text-stone-500 mb-1">Why this one</div>
+              <p class="serif text-sm text-stone-800">FLS is already on GCP; no-code means everyone can use it.</p>
+            </div>
+            <div>
+              <div class="dateline text-stone-500 mb-1">Audience</div>
+              <p class="serif text-sm text-stone-800">Staff and admin first. Teacher use cases as they emerge.</p>
+            </div>
+            <div>
+              <div class="dateline text-stone-500 mb-1">Approved by</div>
+              <p class="serif text-sm text-stone-800">CIO, May 2026</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <p class="serif text-stone-600 text-center text-sm mt-10 italic">More tools will be reviewed as the Task Force advances the Enterprise Software pillar.</p>
+    </div>
+  </section>
+
+  <!-- Mini-Grants / Classified -->
+  <section id="grants" class="py-14 bg-white">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="border-b border-stone-300 pb-3 mb-10">
+        <div class="dateline text-[#e47727] mb-1">Section 04 · Open call</div>
+        <h2 class="serif text-3xl md:text-4xl font-bold">Ten Mini-Grants. $1,000 Each. This Year.</h2>
+      </div>
+
+      <div class="grid md:grid-cols-12 gap-10">
+        <div class="md:col-span-7 serif">
+          <p class="text-lg text-stone-800 leading-relaxed mb-5 dropcap">For FirstLine staff who want to try something specific with AI — a tool, training, materials, time. Two paragraphs to apply. Fast review. The terms are simple: try the thing, write up what you learned, share it with the network.</p>
+          <p class="text-lg text-stone-800 leading-relaxed mb-7">Each grantee's findings will be published here, in future issues — what worked, what didn't, what they'd do differently.</p>
+          <a href="#" class="dateline inline-block bg-[#002f60] text-white px-6 py-3 hover:bg-[#001f40]">Apply for a mini-grant →</a>
+        </div>
+        <div class="md:col-span-5">
+          <div class="bg-stone-50 border border-stone-200 p-6">
+            <div class="dateline text-stone-500 mb-4 pb-3 border-b border-stone-200">2026–27 Cycle</div>
+            <div class="space-y-3 serif">
+              <div class="flex justify-between items-baseline"><span>Grants available</span><span class="text-2xl font-bold text-[#e47727]">10</span></div>
+              <div class="flex justify-between items-baseline"><span>Amount each</span><span class="text-2xl font-bold text-[#e47727]">$1,000</span></div>
+              <div class="flex justify-between items-baseline"><span>Total budget</span><span class="text-2xl font-bold text-[#e47727]">$10,000</span></div>
+              <div class="flex justify-between items-baseline pt-3 border-t border-stone-300"><span>Awarded so far</span><span class="text-2xl font-bold text-stone-400">0</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- For Families -->
+  <section id="families" class="py-14 bg-stone-50 border-y border-stone-200">
+    <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-12 gap-10 items-start">
+      <div class="md:col-span-2 dateline text-[#e47727]">Section 05</div>
+      <div class="md:col-span-10">
+        <h2 class="serif text-3xl md:text-4xl font-bold mb-5 leading-tight">A Note for Families</h2>
+        <p class="serif text-lg text-stone-800 leading-relaxed mb-4 max-w-3xl">We're writing a plain-language guide for FirstLine parents — what AI tools your child may encounter, what we use AI for, what we don't, and how their data is protected. It will be published alongside the Student Usage Policy.</p>
+        <p class="serif text-stone-600 italic">Questions in the meantime? <a href="mailto:talent@firstlineschools.org" class="text-stone-900 underline">talent@firstlineschools.org</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- In Future Issues -->
+  <section class="py-14 bg-stone-900 text-stone-100">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="border-b border-stone-700 pb-3 mb-10">
+        <div class="dateline text-[#e47727] mb-1">Coming in future issues</div>
+        <h2 class="serif text-3xl md:text-4xl font-bold">What we'll share as we learn.</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-10 serif">
+        <div class="pr-6 md:border-r border-stone-700">
+          <h3 class="text-xl font-bold mb-2">Bright spots from classrooms</h3>
+          <p class="text-stone-400">When teachers try something that works, we'll share it here — names, photos, what they did.</p>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold mb-2">Pilot reports — including misses</h3>
+          <p class="text-stone-400">What we tried, what we learned, what we adopted. We publish the things that didn't work, too.</p>
+        </div>
+        <div class="pr-6 md:border-r border-stone-700">
+          <h3 class="text-xl font-bold mb-2">Daily AI-in-education news brief</h3>
+          <p class="text-stone-400">A short summary, drafted by an AI agent and reviewed by a human before it posts. We eat our own cooking.</p>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold mb-2">Mini-grant findings</h3>
+          <p class="text-stone-400">Who applied, what they tried, what they found. Real money, real work, in the open.</p>
+        </div>
+      </div>
+      <p class="serif text-stone-400 italic mt-10 text-center">We'll share these as they're ready. We won't manufacture them to look busier.</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-stone-200 py-10">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between gap-4">
+      <div class="serif">
+        <div class="font-bold text-stone-900 text-lg">FirstLine Schools</div>
+        <div class="text-sm text-stone-500">Education For Life</div>
+      </div>
+      <div class="dateline text-stone-500">Vol. 1 · Issue 01 · May 2026 · talent@firstlineschools.org</div>
+    </div>
+  </footer>
+</body>
+</html>
