@@ -1,0 +1,18 @@
+[
+  {
+    "id": "tip-009-demo",
+    "category": "Vids",
+    "categoryClass": "bg-amber-100 text-amber-800",
+    "title": "Turn a Google Slides deck into a shareable video",
+    "description": "Already made the deck? Vids imports it, layers in narration, and exports a video — no starting from scratch. Great for turning PD decks into on-demand videos, parent-night presentations into follow-up content families can rewatch, or lesson slides into flipped-classroom videos.",
+    "steps": [
+      "Open <a href=\"https://vids.google.com\" target=\"_blank\" rel=\"noopener\" class=\"text-[#002f60] hover:text-[#e47727] underline\">vids.google.com</a>.",
+      "Create a new video → choose <strong>Import from Google Slides</strong>.",
+      "Pick your deck. Each slide becomes a scene.",
+      "Add narration — record your own voice, or use <strong>AI voice</strong> (Voiceover → Generate with AI).",
+      "Adjust scene timing, add transitions, drop in stock media if needed.",
+      "Click <strong>Share</strong> → get a link, or <strong>Download</strong> as MP4."
+    ],
+    "note": "Contributor: Scott Shirey · Repurpose anything you've already made. Combined with Tip #007 (Meet Live Translate), your videos reach families in any language. Do not include student-identifying information in scripts."
+  }
+]

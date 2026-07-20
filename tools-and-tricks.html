@@ -356,6 +356,21 @@
           <p class="text-xs text-stone-500 italic mt-6">Note: the video library is hosted on Vercel — FLS's Securly filter may block it on the school network. If you see a filter page, ask Joe (IT) to whitelist <code>ai-video-library.vercel.app</code>.</p>
         </section>
 
+        <hr class="border-stone-200 my-10">
+
+        <!-- LIVE DEMO — Sheet-fed tip -->
+        <section id="demo" class="mb-14">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-2xl" aria-hidden="true">🧪</span>
+            <h2 class="text-2xl font-extrabold text-[#002f60]">Live Demo — Sheet-fed tip</h2>
+          </div>
+          <p class="text-stone-600 text-sm mb-2">The tip below is rendered dynamically from a JSON file (simulating a Google Sheet). It's the same content as hard-coded Tip #009 above — should look identical.</p>
+          <p class="text-xs text-stone-500 italic mb-6">Proof of pattern: when we migrate to a real Google Sheet as source, teachers submit via form → you approve in the Sheet → the tip auto-appears here. No HTML editing.</p>
+          <div id="demoTips" class="space-y-4">
+            <div class="text-sm text-stone-500 italic p-5 border border-dashed border-stone-300 rounded-lg">Loading tip from JSON...</div>
+          </div>
+        </section>
+
         <div class="border-t border-stone-200 pt-6 text-sm text-stone-600 mt-6">
           <p><strong>How this page grows:</strong> More categories added as we approve more tools and partners. FirstLine Educator Tips grow as staff submit via the form. External resource lists get updated when providers publish something new.</p>
         </div>
@@ -407,6 +422,37 @@
         btn.classList.add('text-stone-500');
       }, 1500);
     }
+
+    // Live demo: fetch tips from JSON (simulates a future Google Sheet CSV source)
+    async function renderDemoTips() {
+      try {
+        const response = await fetch('tips-demo.json');
+        if (!response.ok) throw new Error('Fetch failed: ' + response.status);
+        const tips = await response.json();
+        const container = document.getElementById('demoTips');
+        container.innerHTML = tips.map(tip => `
+          <article id="${tip.id}" class="tip border border-stone-200 rounded-lg p-5 transition-colors">
+            <div class="flex items-start justify-between gap-3 mb-2">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-[10px] font-bold uppercase tracking-wider ${tip.categoryClass} px-2 py-0.5 rounded">${tip.category}</span>
+                <span class="text-[10px] font-bold uppercase tracking-wider bg-purple-100 text-purple-800 px-2 py-0.5 rounded">Sheet-fed</span>
+              </div>
+              <button type="button" onclick="copyLink('${tip.id}', this)" class="text-xs text-stone-500 hover:text-[#e47727] font-semibold whitespace-nowrap">🔗 Copy link</button>
+            </div>
+            <h3 class="text-lg font-bold text-[#002f60] mb-2">${tip.title}</h3>
+            <p class="text-sm text-stone-700 leading-relaxed mb-3">${tip.description}</p>
+            <p class="text-sm text-stone-700 mb-2"><strong>How to do it:</strong></p>
+            <ol class="list-decimal list-inside space-y-1.5 text-sm text-stone-700 marker:text-[#e47727] marker:font-bold mb-3">
+              ${tip.steps.map(step => `<li>${step}</li>`).join('')}
+            </ol>
+            <div class="text-xs text-stone-500 italic">${tip.note}</div>
+          </article>
+        `).join('');
+      } catch (err) {
+        document.getElementById('demoTips').innerHTML = '<div class="text-sm text-red-600 p-5 border border-red-300 rounded-lg">Demo failed to load tips-demo.json — ' + err.message + '</div>';
+      }
+    }
+    renderDemoTips();
   </script>
 </body>
 </html>
