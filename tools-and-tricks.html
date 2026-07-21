@@ -371,12 +371,11 @@
             const parsed = Date.parse(s || '');
             return isNaN(parsed) ? 0 : parsed;
           };
+          const isFeat = (r) => !!(r['Featured Date'] || '').trim();
           approved.sort((a, b) => {
-            const aFeat = (a['Featured Date'] || '').trim();
-            const bFeat = (b['Featured Date'] || '').trim();
-            if (aFeat && !bFeat) return -1;
-            if (!aFeat && bFeat) return 1;
-            if (aFeat && bFeat) return tsValue(bFeat) - tsValue(aFeat);
+            const af = isFeat(a), bf = isFeat(b);
+            if (af && !bf) return -1;
+            if (!af && bf) return 1;
             return tsValue(b.Timestamp) - tsValue(a.Timestamp);
           });
           const container = document.getElementById('tipsList');
