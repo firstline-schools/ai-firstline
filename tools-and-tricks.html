@@ -364,13 +364,17 @@
         complete: function(results) {
           const rows = results.data || [];
           const approved = rows.filter(r => (r['Draft Status'] || '').toLowerCase() === 'approved');
+          const tsValue = (s) => {
+            const parsed = Date.parse(s || '');
+            return isNaN(parsed) ? 0 : parsed;
+          };
           approved.sort((a, b) => {
             const aFeat = (a['Featured Date'] || '').trim();
             const bFeat = (b['Featured Date'] || '').trim();
             if (aFeat && !bFeat) return -1;
             if (!aFeat && bFeat) return 1;
-            if (aFeat && bFeat) return bFeat.localeCompare(aFeat);
-            return (b.Timestamp || '').localeCompare(a.Timestamp || '');
+            if (aFeat && bFeat) return tsValue(bFeat) - tsValue(aFeat);
+            return tsValue(b.Timestamp) - tsValue(a.Timestamp);
           });
           const container = document.getElementById('tipsList');
           if (!approved.length) {
