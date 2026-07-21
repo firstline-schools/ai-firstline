@@ -324,7 +324,7 @@
                 <h3 class="text-base font-bold text-[#002f60]">${escapeHtml(title)}</h3>
               </div>
               <div class="flex items-center gap-3 shrink-0">
-                <button type="button" onclick="event.stopPropagation(); shareTip('${id}')" class="text-xs text-stone-500 hover:text-[#e47727] font-semibold whitespace-nowrap">📧 Share with a colleague</button>
+                <button type="button" onclick="shareTip(event, '${id}')" class="text-xs text-stone-500 hover:text-[#e47727] font-semibold whitespace-nowrap">📧 Share with a colleague</button>
                 <span class="chev text-lg text-stone-400" aria-hidden="true">▸</span>
               </div>
             </summary>
@@ -400,8 +400,8 @@
       }, 1500);
     }
 
-    function shareTip(id) {
-      event.stopPropagation();
+    function shareTip(e, id) {
+      if (e) { e.stopPropagation(); e.preventDefault(); }
       const article = document.getElementById(id);
       if (!article) return;
       const title = (article.querySelector('h3')?.textContent || '').trim();
@@ -409,7 +409,7 @@
       const url = window.location.origin + window.location.pathname + '#' + id;
       const subject = encodeURIComponent(`AI Tip from FirstLine: ${title}`);
       const body = encodeURIComponent(`Thought you'd find this useful — an AI tip from the FirstLine Tools & Tricks page:\n\n${title}\n${desc}\n\nRead the full tip: ${url}`);
-      window.location.href = `mailto:?subject=${subject}&body=${body}`;
+      window.open(`https://mail.google.com/mail/?view=cm&fs=1&su=${subject}&body=${body}`, '_blank', 'noopener');
     }
 
     function copyLink(id, btn) {
