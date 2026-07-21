@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Tools and Tricks — AI at FirstLine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&family=Fraunces:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Open Sans', sans-serif; }
+        .display { font-family: 'Fraunces', Georgia, serif; }
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+        .focus\:not-sr-only:focus { position: static; width: auto; height: auto; padding: inherit; margin: inherit; overflow: visible; clip: auto; }
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+    
+  #site-nav.is-open { display: flex !important; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: #ffffff; padding: 1rem 1.5rem; box-shadow: 0 8px 24px rgba(0,0,0,0.08); z-index: 30; border-top: 1px solid #e7e5e4; gap: 0.25rem; }
+  #site-nav.is-open a { padding: 0.75rem 0; border-bottom: 1px solid #f5f5f4; }
+  #site-nav.is-open a:last-child { border-bottom: 0; }
+</style>
+</head>
+<body class="bg-white text-stone-900">
+
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-white p-3 rounded shadow-lg z-50 font-semibold text-[#002f60] border-2 border-[#e47727]">Skip to main content</a>
+
+    <header class="bg-white border-b border-stone-200 sticky top-0 z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 bg-[#e47727] rounded-full flex items-center justify-center text-white font-bold text-sm" aria-hidden="true">FL</div>
+                <div>
+                    <div class="text-[10px] text-stone-500 leading-none uppercase tracking-wider">FirstLine Schools</div>
+                    <div class="display text-lg font-bold leading-none mt-0.5">AI Together</div>
+                </div>
+            </div>
+            <a href="mock-3-version-c.html" class="text-xs font-semibold text-stone-600 hover:text-[#e47727] focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-offset-2 rounded px-2 py-1">← Back to main</a>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10 grid lg:grid-cols-[220px_1fr] xl:grid-cols-[260px_1fr] gap-8 lg:gap-12">
+
+        <aside class="lg:sticky lg:top-20 lg:self-start lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Contents">
+            <nav aria-label="Category navigation">
+                <div class="text-[10px] font-bold uppercase tracking-widest text-stone-500 mb-3">Categories</div>
+                <ul class="space-y-1 border-l border-stone-200">
+                    <li><a href="#gmail" class="block pl-3 py-1.5 text-sm text-stone-700 hover:text-[#e47727] focus:outline-none focus:text-[#e47727]">✉️ Gmail</a></li>
+                    <li><a href="#docs" class="block pl-3 py-1.5 text-sm text-stone-700 hover:text-[#e47727] focus:outline-none focus:text-[#e47727]">📄 Google Docs</a></li>
+                    <li><a href="#sheets" class="block pl-3 py-1.5 text-sm text-stone-700 hover:text-[#e47727] focus:outline-none focus:text-[#e47727]">📊 Google Sheets</a></li>
+                    <li><a href="#ai" class="block pl-3 py-1.5 text-sm text-stone-700 hover:text-[#e47727] focus:outline-none focus:text-[#e47727]">🚀 AI Prompts</a></li>
+                </ul>
+
+                <div class="text-[10px] font-bold uppercase tracking-widest text-stone-500 mb-3 mt-6">How this page works</div>
+                <div class="text-xs text-stone-600 leading-relaxed space-y-2 pl-3">
+                    <p><strong class="text-[#e47727]">FLS Essentials</strong> — a few we pick and stand behind.</p>
+                    <p><strong class="text-[#002f60]">Learn More</strong> — the best places Google + community already publish.</p>
+                    <p><strong class="text-stone-700">Bright Spots</strong> — stories from FLS teachers using it.</p>
+                </div>
+
+                <div class="text-[10px] font-bold uppercase tracking-widest text-stone-500 mb-2 mt-6">Share a tip</div>
+                <a href="mailto:talent@firstlineschools.org" class="block text-xs text-[#002f60] hover:text-[#e47727] font-semibold pl-3">talent@firstlineschools.org →</a>
+            </nav>
+        </aside>
+
+        <main id="main" class="min-w-0">
+            <div class="max-w-3xl">
+                <div class="text-xs font-bold text-[#e47727] tracking-widest uppercase mb-3">Google Tools and Tricks</div>
+                <h1 class="display text-3xl sm:text-4xl md:text-5xl font-bold text-[#002f60] mb-4 leading-tight">A curated field guide — not a rewrite of what already exists.</h1>
+                <p class="text-base sm:text-lg text-stone-700 leading-relaxed mb-3">Each section has three parts: a few <strong class="text-[#e47727]">FLS Essentials</strong> we've hand-picked and stand behind, links to the best <strong class="text-[#002f60]">external resources</strong> we've found, and <strong>bright spots</strong> from FirstLine teachers using them.</p>
+                <p class="text-sm text-stone-600 leading-relaxed">This means we spend our time picking the highest-leverage tips and connecting them to our policy — not maintaining a full duplicate of what Google, Alice Keeler, and Eric Curts already write better than we could.</p>
+
+                <hr class="border-stone-200 my-10">
+
+                <!-- ================= GMAIL ================= -->
+                <section id="gmail" class="mb-14">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-2xl" aria-hidden="true">✉️</span>
+                        <h2 class="display text-2xl font-bold text-[#002f60]">Gmail</h2>
+                    </div>
+                    <p class="text-stone-600 text-sm mb-8">Where most FirstLine folks spend the most time. Two tricks that hand it back to you.</p>
+
+                    <!-- FLS Essentials -->
+                    <div class="mb-8">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="w-2 h-2 rounded-full bg-[#e47727]" aria-hidden="true"></span>
+                            <h3 class="display text-lg font-bold text-[#e47727]">FLS Essentials</h3>
+                        </div>
+
+                        <article class="mb-6">
+                            <h4 class="display text-lg font-bold text-stone-900 mb-1">Schedule Send — draft late, deliver at the right hour</h4>
+                            <p class="text-stone-700 leading-relaxed text-sm mb-3">Draft a parent email at 10pm; deliver it at 7am. Preserves your evening without slowing your work.</p>
+                            <details class="text-sm">
+                                <summary class="cursor-pointer text-[#002f60] font-semibold hover:text-[#e47727] focus:outline-none focus:ring-2 focus:ring-[#e47727] rounded py-1">How to do it</summary>
+                                <ol class="list-decimal list-inside mt-2 space-y-1 text-stone-700 marker:text-[#e47727] marker:font-bold pl-1">
+                                    <li>Compose your email.</li>
+                                    <li>Click the <strong>arrow next to Send</strong>.</li>
+                                    <li>Pick <strong>Schedule send</strong> → date/time.</li>
+                                </ol>
+                            </details>
+                            <div class="mt-3 bg-orange-50 border-l-2 border-[#e47727] pl-3 py-2 text-xs text-stone-700 italic">
+                                <strong class="not-italic text-[#e47727]">FLS note:</strong> Aligns with our "disciplined" principle. Sending parent-facing email at professional hours also sets a healthy expectation about response times.
+                            </div>
+                        </article>
+
+                        <article>
+                            <h4 class="display text-lg font-bold text-stone-900 mb-1">"Offer times you're free" — instant meeting booking</h4>
+                            <p class="text-stone-700 leading-relaxed text-sm mb-3">Drop clickable time blocks into an email. Recipients pick one and it books both calendars automatically.</p>
+                            <details class="text-sm">
+                                <summary class="cursor-pointer text-[#002f60] font-semibold hover:text-[#e47727] focus:outline-none focus:ring-2 focus:ring-[#e47727] rounded py-1">How to do it</summary>
+                                <ol class="list-decimal list-inside mt-2 space-y-1 text-stone-700 marker:text-[#e47727] marker:font-bold pl-1">
+                                    <li>Open a draft or reply.</li>
+                                    <li>Click the <strong>Calendar icon</strong> in the toolbar.</li>
+                                    <li>Choose <strong>"Offer times you're free"</strong> and drag your open slots.</li>
+                                    <li>Click <strong>Insert into email</strong>.</li>
+                                </ol>
+                            </details>
+                            <div class="mt-3 bg-orange-50 border-l-2 border-[#e47727] pl-3 py-2 text-xs text-stone-700 italic">
+                                <strong class="not-italic text-[#e47727]">FLS note:</strong> Great for parent-teacher meeting rounds. Cuts 5–10 back-and-forth emails per meeting request.
+                            </div>
+                        </article>
+                    </div>
+
+                    <!-- Learn More -->
+                    <div class="mb-8">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="w-2 h-2 rounded-full bg-[#002f60]" aria-hidden="true"></span>
+                            <h3 class="display text-lg font-bold text-[#002f60]">Learn More</h3>
+                        </div>
+                        <ul class="space-y-3 text-sm">
+                            <li>
+                                <a href="https://workspace.google.com/learning-center/products/gmail/" target="_blank" rel="noopener" class="text-[#002f60] hover:text-[#e47727] font-semibold underline">Google Workspace Learning Center — Gmail</a>
+                                <p class="text-stone-600 text-xs mt-1">Official cheat sheets, quick reference cards, and step-by-step guides. Where to send someone brand new to Gmail.</p>
+                            </li>
+                            <li>
+                                <a href="https://alicekeeler.com/" target="_blank" rel="noopener" class="text-[#002f60] hover:text-[#e47727] font-semibold underline">Alice Keeler — Gmail tips</a>
+                                <p class="text-stone-600 text-xs mt-1">Prolific K-12 educator, hundreds of practical Gmail posts specifically for teachers.</p>
+                            </li>
+                            <li>
+                                <a href="https://teachercenter.withgoogle.com/" target="_blank" rel="noopener" class="text-[#002f60] hover:text-[#e47727] font-semibold underline">Google for Education Teacher Center</a>
+                                <p class="text-stone-600 text-xs mt-1">Free training modules on Gmail + all of Workspace, K-12 lens.</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Bright Spots -->
+                    <div>
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="w-2 h-2 rounded-full bg-stone-500" aria-hidden="true"></span>
+                            <h3 class="display text-lg font-bold text-stone-700">Bright Spots</h3>
+                        </div>
+                        <p class="text-sm text-stone-600 italic">First one lands here. Using one of these? <a href="mailto:talent@firstlineschools.org" class="text-[#002f60] hover:text-[#e47727] underline not-italic font-semibold">Tell us how →</a></p>
+                    </div>
+                </section>
+
+                <hr class="border-stone-200 my-10">
+
+                <!-- ================= DOCS ================= -->
+                <section id="docs" class="mb-14">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-2xl" aria-hidden="true">📄</span>
+                        <h2 class="display text-2xl font-bold text-[#002f60]">Google Docs</h2>
+                    </div>
+                    <p class="text-stone-600 text-sm mb-8">Where a lot of your day happens. Small tricks compound fast.</p>
+
+                    <div class="mb-8">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="w-2 h-2 rounded-full bg-[#e47727]" aria-hidden="true"></span>
+                            <h3 class="display text-lg font-bold text-[#e47727]">FLS Essentials</h3>
+                        </div>
+
+                        <article class="mb-6">
+                            <h4 class="display text-lg font-bold text-stone-900 mb-1">The @ menu — Docs' universal insert shortcut</h4>
+                            <p class="text-stone-700 leading-relaxed text-sm mb-3">Type <code class="bg-stone-100 px-1.5 py-0.5 rounded text-[#e47727] font-mono">@</code> anywhere for instant access to tables, dropdowns, meeting notes, colleague chips, and files. Skip the nested menus forever.</p>
+                            <details class="text-sm">
+                                <summary class="cursor-pointer text-[#002f60] font-semibold hover:text-[#e47727] focus:outline-none focus:ring-2 focus:ring-[#e47727] rounded py-1">Try these</summary>
+                                <ul class="mt-2 space-y-1 text-stone-700 pl-1">
+                                    <li>&bull;&nbsp; <code class="bg-stone-100 px-1.5 py-0.5 rounded text-[#002f60] font-mono">@table</code> — insert a table</li>
+                                    <li>&bull;&nbsp; <code class="bg-stone-100 px-1.5 py-0.5 rounded text-[#002f60] font-mono">@meeting</code> — auto-fill from Calendar event</li>
+                                    <li>&bull;&nbsp; <code class="bg-stone-100 px-1.5 py-0.5 rounded text-[#002f60] font-mono">@dropdown</code> — status/tracker fields</li>
+                                    <li>&bull;&nbsp; <code class="bg-stone-100 px-1.5 py-0.5 rounded text-[#002f60] font-mono">@name</code> — insert a people chip</li>
+                                </ul>
+                            </details>
+                            <div class="mt-3 bg-orange-50 border-l-2 border-[#e47727] pl-3 py-2 text-xs text-stone-700 italic">
+                                <strong class="not-italic text-[#e47727]">FLS note:</strong> Once you use <code class="text-[#e47727]">@meeting</code>, you never go back to hand-formatting minutes.
+                            </div>
+                        </article>
+
+                        <article>
+                            <h4 class="display text-lg font-bold text-stone-900 mb-1">Voice typing — dictate observations and meeting notes</h4>
+                            <p class="text-stone-700 leading-relaxed text-sm mb-3">Capture classroom observation notes on the walk back to your desk. Google's voice recognition is very accurate and understands punctuation commands.</p>
+                            <details class="text-sm">
+                                <summary class="cursor-pointer text-[#002f60] font-semibold hover:text-[#e47727] focus:outline-none focus:ring-2 focus:ring-[#e47727] rounded py-1">How to do it</summary>
+                                <ol class="list-decimal list-inside mt-2 space-y-1 text-stone-700 marker:text-[#e47727] marker:font-bold pl-1">
+                                    <li><strong>Tools</strong> → <strong>Voice typing</strong> (⌘+Shift+S on Mac).</li>
+                                    <li>Click the microphone → speak naturally.</li>
+                                    <li>Say <em>"period,"</em> <em>"comma,"</em> or <em>"new paragraph"</em> for punctuation.</li>
+                                </ol>
+                            </details>
+                            <div class="mt-3 bg-orange-50 border-l-2 border-[#e47727] pl-3 py-2 text-xs text-stone-700 italic">
+                                <strong class="not-italic text-[#e47727]">FLS note:</strong> Especially useful for post-observation notes and IEP session recaps.
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="mb-8">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="w-2 h-2 rounded-full bg-[#002f60]" aria-hidden="true"></span>
+                            <h3 class="display text-lg font-bold text-[#002f60]">Learn More</h3>
+                        </div>
+                        <ul class="space-y-3 text-sm">
+                            <li>
+                                <a href="https://workspace.google.com/learning-center/products/docs/" target="_blank" rel="noopener" class="text-[#002f60] hover:text-[#e47727] font-semibold underline">Google Workspace Learning Center — Docs</a>
+                                <p class="text-stone-600 text-xs mt-1">Official quick-start guide and cheat sheet.</p>
+                            </li>
+                            <li>
+                                <a href="https://www.controlaltachieve.com/" target="_blank" rel="noopener" class="text-[#002f60] hover:text-[#e47727] font-semibold underline">Eric Curts — Control Alt Achieve</a>
+                                <p class="text-stone-600 text-xs mt-1">Prolific K-12 EdTech blog, deep on Docs features Alice Keeler doesn't cover.</p>
+                            </li>
+                            <li>
+                                <a href="https://ditchthattextbook.com/" target="_blank" rel="noopener" class="text-[#002f60] hover:text-[#e47727] font-semibold underline">Matt Miller — Ditch That Textbook</a>
+                                <p class="text-stone-600 text-xs mt-1">Practical classroom applications for Docs + growing library of AI-in-classroom tips.</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="w-2 h-2 rounded-full bg-stone-500" aria-hidden="true"></span>
+                            <h3 class="display text-lg font-bold text-stone-700">Bright Spots</h3>
+                        </div>
+                        <p class="text-sm text-stone-600 italic">First one lands here. <a href="mailto:talent@firstlineschools.org" class="text-[#002f60] hover:text-[#e47727] underline not-italic font-semibold">Share a story →</a></p>
+                    </div>
+                </section>
+
+                <hr class="border-stone-200 my-10">
+
+                <!-- ================= SHEETS ================= -->
+                <section id="sheets" class="mb-14">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-2xl" aria-hidden="true">📊</span>
+                        <h2 class="display text-2xl font-bold text-[#002f60]">Google Sheets</h2>
+                    </div>
+                    <p class="text-stone-600 text-sm mb-8">The engine behind anything with structured data. These two hit hardest for FirstLine.</p>
+
+                    <div class="mb-8">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="w-2 h-2 rounded-full bg-[#e47727]" aria-hidden="true"></span>
+                            <h3 class="display text-lg font-bold text-[#e47727]">FLS Essentials</h3>
+                        </div>
+
+                        <article class="mb-6">
+                            <h4 class="display text-lg font-bold text-stone-900 mb-1">GOOGLETRANSLATE() — bulk-translate family communications</h4>
+                            <p class="text-stone-700 leading-relaxed text-sm mb-3">Write a message column in English; render it in Spanish, Vietnamese, or Arabic in a single formula. Removes the translation bottleneck from family communications.</p>
+                            <div class="p-3 bg-stone-900 text-stone-100 rounded-xl flex justify-between items-center font-mono text-xs sm:text-sm gap-3 mb-2">
+                                <span class="truncate">=GOOGLETRANSLATE(A2, "en", "es")</span>
+                                <button type="button" onclick="copyText('=GOOGLETRANSLATE(A2, &quot;en&quot;, &quot;es&quot;)', this)" aria-label="Copy formula" class="bg-[#002f60] hover:bg-[#001f40] text-white px-3 py-1 rounded transition text-xs shrink-0 focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-offset-2 focus:ring-offset-stone-900">Copy</button>
+                            </div>
+                            <p class="text-xs text-stone-600 mb-3">Codes: <code>es</code> (Spanish), <code>vi</code> (Vietnamese), <code>ar</code> (Arabic), <code>fr</code> (French). Use <code>"auto"</code> to auto-detect source.</p>
+                            <div class="bg-orange-50 border-l-2 border-[#e47727] pl-3 py-2 text-xs text-stone-700 italic">
+                                <strong class="not-italic text-[#e47727]">FLS note:</strong> Directly serves multilingual family engagement. Try this before hand-translating outreach lists.
+                            </div>
+                        </article>
+
+                        <article>
+                            <h4 class="display text-lg font-bold text-stone-900 mb-1">Dot notation — extract emails and names from Smart Chips</h4>
+                            <p class="text-stone-700 leading-relaxed text-sm mb-3">When a cell holds a Smart Chip (person, file, event), pull properties off it like an object. Works for names, emails, file titles, event attendees, last-modified timestamps.</p>
+                            <div class="p-3 bg-stone-900 text-stone-100 rounded-xl flex justify-between items-center font-mono text-xs sm:text-sm gap-3 mb-2">
+                                <span class="truncate">=A2.email</span>
+                                <button type="button" onclick="copyText('=A2.email', this)" aria-label="Copy formula" class="bg-[#002f60] hover:bg-[#001f40] text-white px-3 py-1 rounded transition text-xs shrink-0 focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-offset-2 focus:ring-offset-stone-900">Copy</button>
+                            </div>
+                            <p class="text-xs text-stone-600 mb-3">Also: <code class="bg-stone-100 px-1.5 py-0.5 rounded text-[#002f60] font-mono">.name</code>, <code class="bg-stone-100 px-1.5 py-0.5 rounded text-[#002f60] font-mono">.[file name]</code>, <code class="bg-stone-100 px-1.5 py-0.5 rounded text-[#002f60] font-mono">.attendees</code>.</p>
+                            <div class="bg-orange-50 border-l-2 border-[#e47727] pl-3 py-2 text-xs text-stone-700 italic">
+                                <strong class="not-italic text-[#e47727]">FLS note:</strong> Advanced but transforms how you manage rosters, groupings, and any list that used to require copy-paste.
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="mb-8">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="w-2 h-2 rounded-full bg-[#002f60]" aria-hidden="true"></span>
+                            <h3 class="display text-lg font-bold text-[#002f60]">Learn More</h3>
+                        </div>
+                        <ul class="space-y-3 text-sm">
+                            <li>
+                                <a href="https://workspace.google.com/learning-center/products/sheets/" target="_blank" rel="noopener" class="text-[#002f60] hover:text-[#e47727] font-semibold underline">Google Workspace Learning Center — Sheets</a>
+                                <p class="text-stone-600 text-xs mt-1">Official cheat sheet + formulas reference.</p>
+                            </li>
+                            <li>
+                                <a href="https://alicekeeler.com/" target="_blank" rel="noopener" class="text-[#002f60] hover:text-[#e47727] font-semibold underline">Alice Keeler — Sheets tips</a>
+                                <p class="text-stone-600 text-xs mt-1">Practical formulas + templates for teachers.</p>
+                            </li>
+                            <li>
+                                <a href="https://shakeuplearning.com/" target="_blank" rel="noopener" class="text-[#002f60] hover:text-[#e47727] font-semibold underline">Kasey Bell — ShakeUpLearning</a>
+                                <p class="text-stone-600 text-xs mt-1">Google-certified trainer, weekly Sheets tips + podcast.</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="w-2 h-2 rounded-full bg-stone-500" aria-hidden="true"></span>
+                            <h3 class="display text-lg font-bold text-stone-700">Bright Spots</h3>
+                        </div>
+                        <p class="text-sm text-stone-600 italic">First one lands here. <a href="mailto:talent@firstlineschools.org" class="text-[#002f60] hover:text-[#e47727] underline not-italic font-semibold">Share a story →</a></p>
+                    </div>
+                </section>
+
+                <hr class="border-stone-200 my-10">
+
+                <!-- ================= AI ================= -->
+                <section id="ai" class="mb-14">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-2xl" aria-hidden="true">🚀</span>
+                        <h2 class="display text-2xl font-bold text-[#002f60]">AI Prompts</h2>
+                    </div>
+                    <p class="text-stone-600 text-sm mb-8">Prompts tested against FirstLine work. Human review is required for anything that becomes an artifact.</p>
+
+                    <div class="mb-8">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="w-2 h-2 rounded-full bg-[#e47727]" aria-hidden="true"></span>
+                            <h3 class="display text-lg font-bold text-[#e47727]">FLS Essentials</h3>
+                        </div>
+
+                        <article class="mb-6">
+                            <h4 class="display text-lg font-bold text-stone-900 mb-1">IEP progress note drafter — strengths-based language, fast</h4>
+                            <p class="text-stone-700 leading-relaxed text-sm mb-3">Feed observation notes to Gemini; get IEP-appropriate first drafts. Human review always required — but this saves the "how do I phrase this?" work.</p>
+                            <div class="p-3 bg-stone-900 text-stone-100 rounded-xl flex justify-between items-start font-mono text-xs gap-3 mb-2">
+                                <span>"You are helping a special education teacher draft an IEP progress note. Given these observations: [paste notes], write a progress summary in professional, strengths-based language covering: current performance, progress toward the goal, and next steps. Do not fabricate data."</span>
+                                <button type="button" onclick="copyText('You are helping a special education teacher draft an IEP progress note. Given these observations: [paste notes], write a progress summary in professional, strengths-based language covering: current performance, progress toward the goal, and next steps. Do not fabricate data.', this)" aria-label="Copy prompt" class="bg-[#002f60] hover:bg-[#001f40] text-white px-3 py-1 rounded transition text-xs shrink-0 focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-offset-2 focus:ring-offset-stone-900">Copy</button>
+                            </div>
+                            <div class="bg-orange-50 border-l-2 border-[#e47727] pl-3 py-2 text-xs text-stone-700 italic">
+                                <strong class="not-italic text-[#e47727]">FLS note:</strong> FirstLine-original prompt. You own the accuracy. Do not paste student-identifying information into consumer AI tools — use Gemini Enterprise.
+                            </div>
+                        </article>
+
+                        <article>
+                            <h4 class="display text-lg font-bold text-stone-900 mb-1">Reading-level translator — differentiate any text</h4>
+                            <p class="text-stone-700 leading-relaxed text-sm mb-3">Paste dense text; get an accessible version at the reading level you need. Preserves core vocabulary. Works in Gemini, Claude, or ChatGPT.</p>
+                            <div class="p-3 bg-stone-900 text-stone-100 rounded-xl flex justify-between items-start font-mono text-xs gap-3 mb-2">
+                                <span>"Rewrite this text at a 3rd-grade reading level. Maintain the key vocabulary words but shorten sentence structures."</span>
+                                <button type="button" onclick="copyText('Rewrite this text at a 3rd-grade reading level. Maintain the key vocabulary words but shorten sentence structures.', this)" aria-label="Copy prompt" class="bg-[#002f60] hover:bg-[#001f40] text-white px-3 py-1 rounded transition text-xs shrink-0 focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-offset-2 focus:ring-offset-stone-900">Copy</button>
+                            </div>
+                            <div class="bg-orange-50 border-l-2 border-[#e47727] pl-3 py-2 text-xs text-stone-700 italic">
+                                <strong class="not-italic text-[#e47727]">FLS note:</strong> Approved for Gemini Enterprise. Swap "3rd-grade" for your target level. Do not paste student-identifying information.
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="mb-8">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="w-2 h-2 rounded-full bg-[#002f60]" aria-hidden="true"></span>
+                            <h3 class="display text-lg font-bold text-[#002f60]">Learn More</h3>
+                        </div>
+                        <ul class="space-y-3 text-sm">
+                            <li>
+                                <a href="https://applieddigitalskills.withgoogle.com/" target="_blank" rel="noopener" class="text-[#002f60] hover:text-[#e47727] font-semibold underline">Google Applied Digital Skills — AI for educators</a>
+                                <p class="text-stone-600 text-xs mt-1">Free modules on using Gemini in the classroom, grade-band appropriate.</p>
+                            </li>
+                            <li>
+                                <a href="https://edu.google.com/workspace-for-education/products/gemini/" target="_blank" rel="noopener" class="text-[#002f60] hover:text-[#e47727] font-semibold underline">Google for Education — Gemini in schools</a>
+                                <p class="text-stone-600 text-xs mt-1">Official guidance on Gemini for K-12, matches our approved-tool stance.</p>
+                            </li>
+                            <li>
+                                <a href="https://ditchthattextbook.com/category/artificial-intelligence-ai/" target="_blank" rel="noopener" class="text-[#002f60] hover:text-[#e47727] font-semibold underline">Matt Miller — Ditch That Textbook AI</a>
+                                <p class="text-stone-600 text-xs mt-1">Growing library of practical AI prompts and workflows for K-12.</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="w-2 h-2 rounded-full bg-stone-500" aria-hidden="true"></span>
+                            <h3 class="display text-lg font-bold text-stone-700">Bright Spots</h3>
+                        </div>
+                        <p class="text-sm text-stone-600 italic">First one lands here. Tried a prompt from this page? <a href="mailto:talent@firstlineschools.org" class="text-[#002f60] hover:text-[#e47727] underline not-italic font-semibold">Tell us how it went →</a></p>
+                    </div>
+                </section>
+
+                <div class="border-t border-stone-200 pt-6 text-sm text-stone-600 mt-6">
+                    <p><strong>How this page grows:</strong> Slowly. We add FLS Essentials only when we've tested one and it earns its keep. External links get updated when we find something better. Bright Spots appear as teachers share them.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="border-t border-stone-200 py-6 px-4 sm:px-6 text-center">
+        <div class="max-w-7xl mx-auto text-sm text-stone-600">
+            <p>Part of AI at FirstLine · <a href="mock-3-version-c.html" class="text-[#002f60] hover:text-[#e47727] font-semibold underline focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-offset-2 rounded">Back to main →</a></p>
+        </div>
+    </footer>
+
+    <script>
+        function copyText(text, btn) {
+            navigator.clipboard.writeText(text);
+            const originalText = btn.textContent;
+            btn.textContent = 'Copied!';
+            btn.classList.add('bg-emerald-600');
+            btn.classList.remove('bg-[#002f60]');
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.classList.remove('bg-emerald-600');
+                btn.classList.add('bg-[#002f60]');
+            }, 1500);
+        }
+    </script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.querySelector('button[aria-label="Open menu"]');
+    const nav = document.getElementById('site-nav');
+    if (!btn || !nav) return;
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      nav.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', nav.classList.contains('is-open'));
+    });
+    // Close on link click
+    nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nav.classList.remove('is-open')));
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+      if (nav.classList.contains('is-open') && !nav.contains(e.target) && e.target !== btn) {
+        nav.classList.remove('is-open');
+      }
+    });
+  });
+</script>
+</body>
+</html>

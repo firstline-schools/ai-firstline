@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Tools and Tricks — AI at FirstLine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&family=Fraunces:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Open Sans', sans-serif; background: #fffbf5; }
+        .display { font-family: 'Fraunces', Georgia, serif; }
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+        .focus\:not-sr-only:focus { position: static; width: auto; height: auto; padding: inherit; margin: inherit; overflow: visible; clip: auto; }
+        .trick[data-open="true"] .trick-body { display: block; }
+        .trick[data-open="true"] .trick-icon { transform: rotate(90deg); }
+        .trick-icon { transition: transform 0.2s ease; }
+        .filter-chip[aria-pressed="true"] { background: #002f60; color: white; border-color: #002f60; }
+    
+  #site-nav.is-open { display: flex !important; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: #ffffff; padding: 1rem 1.5rem; box-shadow: 0 8px 24px rgba(0,0,0,0.08); z-index: 30; border-top: 1px solid #e7e5e4; gap: 0.25rem; }
+  #site-nav.is-open a { padding: 0.75rem 0; border-bottom: 1px solid #f5f5f4; }
+  #site-nav.is-open a:last-child { border-bottom: 0; }
+</style>
+</head>
+<body class="text-stone-900">
+
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-white p-3 rounded shadow-lg z-50 font-semibold text-[#002f60] border-2 border-[#e47727]">Skip to main content</a>
+
+    <!-- Masthead -->
+    <header class="bg-white border-b border-stone-200 sticky top-0 z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 bg-[#e47727] rounded-full flex items-center justify-center text-white font-bold text-sm" aria-hidden="true">FL</div>
+                <div>
+                    <div class="text-[10px] text-stone-500 leading-none uppercase tracking-wider">FirstLine Schools</div>
+                    <div class="display text-lg font-bold leading-none mt-0.5">AI Together</div>
+                </div>
+            </div>
+            <a href="mock-3-version-c.html" class="text-xs font-semibold text-stone-600 hover:text-[#e47727] focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-offset-2 rounded px-2 py-1">← Back to main</a>
+        </div>
+    </header>
+
+    <main id="main">
+        <!-- Hero + Search -->
+        <section class="pt-12 pb-8 px-4 sm:px-6">
+            <div class="max-w-3xl mx-auto text-center">
+                <div class="text-xs font-bold text-[#e47727] tracking-widest uppercase mb-3">Google Tools and Tricks</div>
+                <h1 class="display text-3xl sm:text-4xl md:text-5xl font-bold text-[#002f60] mb-4 leading-tight">Find any Google trick in one search.</h1>
+                <p class="text-base sm:text-lg text-stone-700 mb-8 max-w-2xl mx-auto">Type what you're trying to do — email a parent, translate a Sheet, differentiate a text — and we'll surface the shortcut.</p>
+
+                <div class="relative">
+                    <label for="searchInput" class="sr-only">Search tricks</label>
+                    <input type="search"
+                                 id="searchInput"
+                                 onkeyup="filterTricks()"
+                                 placeholder="Try 'schedule email', 'translate', 'IEP note', 'voice typing'..."
+                                 class="w-full px-5 py-4 pl-14 rounded-2xl border-2 border-stone-200 shadow-md focus:ring-4 focus:ring-[#e47727]/30 focus:border-[#e47727] focus:outline-none transition text-base sm:text-lg">
+                    <div class="absolute left-5 top-1/2 -translate-y-1/2 text-stone-400 text-xl" aria-hidden="true">🔍</div>
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-2 mt-5" role="group" aria-label="Filter by category">
+                    <button type="button" onclick="setFilter('all', this)" aria-pressed="true" class="filter-chip px-3 py-1.5 text-xs font-semibold rounded-full bg-[#002f60] text-white border-2 border-[#002f60] focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-offset-2">All</button>
+                    <button type="button" onclick="setFilter('gmail', this)" aria-pressed="false" class="filter-chip px-3 py-1.5 text-xs font-semibold rounded-full bg-white border-2 border-stone-300 text-stone-700 hover:border-[#e47727] focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-offset-2">✉️ Gmail</button>
+                    <button type="button" onclick="setFilter('docs', this)" aria-pressed="false" class="filter-chip px-3 py-1.5 text-xs font-semibold rounded-full bg-white border-2 border-stone-300 text-stone-700 hover:border-[#e47727] focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-offset-2">📄 Docs</button>
+                    <button type="button" onclick="setFilter('sheets', this)" aria-pressed="false" class="filter-chip px-3 py-1.5 text-xs font-semibold rounded-full bg-white border-2 border-stone-300 text-stone-700 hover:border-[#e47727] focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-offset-2">📊 Sheets</button>
+                    <button type="button" onclick="setFilter('ai', this)" aria-pressed="false" class="filter-chip px-3 py-1.5 text-xs font-semibold rounded-full bg-white border-2 border-stone-300 text-stone-700 hover:border-[#e47727] focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-offset-2">🚀 AI Prompts</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results -->
+        <section class="pb-16 px-4 sm:px-6" aria-labelledby="tricksHeading">
+            <div class="max-w-3xl mx-auto">
+                <h2 id="tricksHeading" class="sr-only">Tricks</h2>
+                <ul class="space-y-2" role="list" id="tricksList" aria-live="polite">
+
+                    <li>
+                        <article class="trick bg-white rounded-xl border border-stone-200 hover:border-[#e47727] transition-colors overflow-hidden" data-category="gmail" data-open="false">
+                            <button type="button" onclick="toggleTrick(this)" aria-expanded="false" aria-controls="body-1" class="w-full text-left px-4 sm:px-5 py-4 flex items-center gap-4 focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-inset">
+                                <span class="text-2xl shrink-0" aria-hidden="true">✉️</span>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center flex-wrap gap-1.5 mb-1">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider bg-orange-100 text-[#e47727] px-2 py-0.5 rounded-full">Gmail</span>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider bg-stone-100 text-stone-700 px-2 py-0.5 rounded-full">Easy</span>
+                                        <span class="text-[10px] font-semibold text-stone-500">⏱ Saves 3–5 min per meeting</span>
+                                    </div>
+                                    <h3 class="display font-bold text-stone-900 trick-title">"Offer times you're free" — instant meeting booking</h3>
+                                </div>
+                                <span class="text-2xl text-stone-400 shrink-0 trick-icon font-light" aria-hidden="true">›</span>
+                            </button>
+                            <div id="body-1" class="trick-body hidden px-4 sm:px-5 pb-5 pt-2 border-t border-stone-100 bg-stone-50/40">
+                                <p class="text-stone-700 mb-4 leading-relaxed">Instead of the "does 2pm work? How about 3?" back-and-forth, drop clickable time blocks straight into your email. Recipients pick one and it books both calendars automatically.</p>
+                                <h4 class="font-semibold text-stone-900 mb-2 text-sm">How to do it:</h4>
+                                <ol class="list-decimal list-inside space-y-1.5 text-sm text-stone-700 marker:text-[#e47727] marker:font-bold">
+                                    <li>Open a draft or reply in Gmail.</li>
+                                    <li>Click the <strong>Calendar icon</strong> in the bottom formatting toolbar.</li>
+                                    <li>Choose <strong>"Offer times you're free"</strong> and drag your open slots in the side panel.</li>
+                                    <li>Click <strong>Insert into email</strong> — done.</li>
+                                </ol>
+                            </div>
+                        </article>
+                    </li>
+
+                    <li>
+                        <article class="trick bg-white rounded-xl border border-stone-200 hover:border-[#e47727] transition-colors overflow-hidden" data-category="gmail" data-open="false">
+                            <button type="button" onclick="toggleTrick(this)" aria-expanded="false" aria-controls="body-2" class="w-full text-left px-4 sm:px-5 py-4 flex items-center gap-4 focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-inset">
+                                <span class="text-2xl shrink-0" aria-hidden="true">✉️</span>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center flex-wrap gap-1.5 mb-1">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider bg-orange-100 text-[#e47727] px-2 py-0.5 rounded-full">Gmail</span>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider bg-stone-100 text-stone-700 px-2 py-0.5 rounded-full">Easy</span>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full">NEW</span>
+                                        <span class="text-[10px] font-semibold text-stone-500">⏱ Preserves work-life boundary</span>
+                                    </div>
+                                    <h3 class="display font-bold text-stone-900 trick-title">Schedule Send — draft late, deliver at the right hour</h3>
+                                </div>
+                                <span class="text-2xl text-stone-400 shrink-0 trick-icon font-light" aria-hidden="true">›</span>
+                            </button>
+                            <div id="body-2" class="trick-body hidden px-4 sm:px-5 pb-5 pt-2 border-t border-stone-100 bg-stone-50/40">
+                                <p class="text-stone-700 mb-4 leading-relaxed">Draft a parent email at 10pm without arriving at 10pm. Schedule it for 7am when parents actually read it — and you don't set the expectation that you're always available.</p>
+                                <h4 class="font-semibold text-stone-900 mb-2 text-sm">How to do it:</h4>
+                                <ol class="list-decimal list-inside space-y-1.5 text-sm text-stone-700 marker:text-[#e47727] marker:font-bold">
+                                    <li>Compose your email.</li>
+                                    <li>Click the <strong>arrow next to Send</strong>.</li>
+                                    <li>Pick <strong>Schedule send</strong> → choose a suggested time or set your own.</li>
+                                </ol>
+                            </div>
+                        </article>
+                    </li>
+
+                    <li>
+                        <article class="trick bg-white rounded-xl border border-stone-200 hover:border-[#e47727] transition-colors overflow-hidden" data-category="docs" data-open="false">
+                            <button type="button" onclick="toggleTrick(this)" aria-expanded="false" aria-controls="body-3" class="w-full text-left px-4 sm:px-5 py-4 flex items-center gap-4 focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-inset">
+                                <span class="text-2xl shrink-0" aria-hidden="true">📄</span>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center flex-wrap gap-1.5 mb-1">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider bg-blue-100 text-[#002f60] px-2 py-0.5 rounded-full">Docs</span>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider bg-stone-100 text-stone-700 px-2 py-0.5 rounded-full">Easy</span>
+                                        <span class="text-[10px] font-semibold text-stone-500">⏱ Saves countless clicks</span>
+                                    </div>
+                                    <h3 class="display font-bold text-stone-900 trick-title">The @ menu — Docs' universal insert shortcut</h3>
+                                </div>
+                                <span class="text-2xl text-stone-400 shrink-0 trick-icon font-light" aria-hidden="true">›</span>
+                            </button>
+                            <div id="body-3" class="trick-body hidden px-4 sm:px-5 pb-5 pt-2 border-t border-stone-100 bg-stone-50/40">
+                                <p class="text-stone-700 mb-4 leading-relaxed">The <code class="bg-stone-100 px-1.5 py-0.5 rounded text-[#e47727] font-mono">@</code> symbol is Docs' universal insert menu. Type it to bring up files, tables, meeting notes, dropdowns, and colleague chips — no more digging through nested menus.</p>
+                                <h4 class="font-semibold text-stone-900 mb-2 text-sm">Try these:</h4>
+                                <ul class="space-y-1.5 text-sm text-stone-700">
+                                    <li><code class="bg-stone-100 px-1.5 py-0.5 rounded text-[#002f60] font-mono">@table</code> — insert a table</li>
+                                    <li><code class="bg-stone-100 px-1.5 py-0.5 rounded text-[#002f60] font-mono">@dropdown</code> — status/tracker fields</li>
+                                    <li><code class="bg-stone-100 px-1.5 py-0.5 rounded text-[#002f60] font-mono">@meeting</code> — auto-populate from a Calendar event</li>
+                                    <li><code class="bg-stone-100 px-1.5 py-0.5 rounded text-[#002f60] font-mono">@colleague-name</code> — insert a smart people chip</li>
+                                </ul>
+                            </div>
+                        </article>
+                    </li>
+
+                    <li>
+                        <article class="trick bg-white rounded-xl border border-stone-200 hover:border-[#e47727] transition-colors overflow-hidden" data-category="docs" data-open="false">
+                            <button type="button" onclick="toggleTrick(this)" aria-expanded="false" aria-controls="body-4" class="w-full text-left px-4 sm:px-5 py-4 flex items-center gap-4 focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-inset">
+                                <span class="text-2xl shrink-0" aria-hidden="true">🎙️</span>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center flex-wrap gap-1.5 mb-1">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider bg-blue-100 text-[#002f60] px-2 py-0.5 rounded-full">Docs</span>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider bg-stone-100 text-stone-700 px-2 py-0.5 rounded-full">Easy</span>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full">NEW</span>
+                                        <span class="text-[10px] font-semibold text-stone-500">⏱ 3–5× faster than typing</span>
+                                    </div>
+                                    <h3 class="display font-bold text-stone-900 trick-title">Voice typing — dictate observations and meeting notes</h3>
+                                </div>
+                                <span class="text-2xl text-stone-400 shrink-0 trick-icon font-light" aria-hidden="true">›</span>
+                            </button>
+                            <div id="body-4" class="trick-body hidden px-4 sm:px-5 pb-5 pt-2 border-t border-stone-100 bg-stone-50/40">
+                                <p class="text-stone-700 mb-4 leading-relaxed">Great for capturing classroom observation notes on the walk back to your desk, or draining an interview into a Doc without typing. Google's voice recognition is very accurate and understands punctuation.</p>
+                                <h4 class="font-semibold text-stone-900 mb-2 text-sm">How to do it:</h4>
+                                <ol class="list-decimal list-inside space-y-1.5 text-sm text-stone-700 marker:text-[#e47727] marker:font-bold">
+                                    <li><strong>Tools</strong> menu → <strong>Voice typing</strong> (or ⌘+Shift+S on Mac).</li>
+                                    <li>Click the microphone → speak naturally.</li>
+                                    <li>Say <em>"period,"</em> <em>"comma,"</em> or <em>"new paragraph"</em> for punctuation.</li>
+                                </ol>
+                            </div>
+                        </article>
+                    </li>
+
+                    <li>
+                        <article class="trick bg-white rounded-xl border border-stone-200 hover:border-[#e47727] transition-colors overflow-hidden" data-category="sheets" data-open="false">
+                            <button type="button" onclick="toggleTrick(this)" aria-expanded="false" aria-controls="body-5" class="w-full text-left px-4 sm:px-5 py-4 flex items-center gap-4 focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-inset">
+                                <span class="text-2xl shrink-0" aria-hidden="true">📊</span>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center flex-wrap gap-1.5 mb-1">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider bg-green-100 text-green-800 px-2 py-0.5 rounded-full">Sheets</span>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider bg-stone-100 text-stone-700 px-2 py-0.5 rounded-full">Intermediate</span>
+                                        <span class="text-[10px] font-semibold text-stone-500">⏱ Eliminates copy-paste</span>
+                                    </div>
+                                    <h3 class="display font-bold text-stone-900 trick-title">Extract email + names from Smart Chips with dot notation</h3>
+                                </div>
+                                <span class="text-2xl text-stone-400 shrink-0 trick-icon font-light" aria-hidden="true">›</span>
+                            </button>
+                            <div id="body-5" class="trick-body hidden px-4 sm:px-5 pb-5 pt-2 border-t border-stone-100 bg-stone-50/40">
+                                <p class="text-stone-700 mb-4 leading-relaxed">When a Sheets cell holds a Smart Chip (a person, a Doc, a Calendar event), you can pull properties off it like an object. Works for names, emails, file titles, event attendees, and last-modified times.</p>
+                                <div class="p-3 bg-stone-900 text-stone-100 rounded-xl flex justify-between items-center font-mono text-xs sm:text-sm gap-3">
+                                    <span class="truncate">=A2.email</span>
+                                    <button type="button" onclick="copyText('=A2.email', this)" aria-label="Copy code" class="bg-[#002f60] hover:bg-[#001f40] text-white px-3 py-1 rounded transition text-xs shrink-0 focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-offset-2 focus:ring-offset-stone-900">Copy</button>
+                                </div>
+                                <p class="text-xs text-stone-500 mt-3">Also try <code class="bg-stone-100 px-1.5 py-0.5 rounded text-[#002f60] font-mono">=A2.name</code>, <code class="bg-stone-100 px-1.5 py-0.5 rounded text-[#002f60] font-mono">=A2.[file name]</code>, or <code class="bg-stone-100 px-1.5 py-0.5 rounded text-[#002f60] font-mono">=A2.attendees</code>.</p>
+                            </div>
+                        </article>
+                    </li>
+
+                    <li>
+                        <article class="trick bg-white rounded-xl border border-stone-200 hover:border-[#e47727] transition-colors overflow-hidden" data-category="sheets" data-open="false">
+                            <button type="button" onclick="toggleTrick(this)" aria-expanded="false" aria-controls="body-6" class="w-full text-left px-4 sm:px-5 py-4 flex items-center gap-4 focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-inset">
+                                <span class="text-2xl shrink-0" aria-hidden="true">🌐</span>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center flex-wrap gap-1.5 mb-1">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider bg-green-100 text-green-800 px-2 py-0.5 rounded-full">Sheets</span>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider bg-stone-100 text-stone-700 px-2 py-0.5 rounded-full">Intermediate</span>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full">NEW</span>
+                                        <span class="text-[10px] font-semibold text-stone-500">⏱ Family comms at scale</span>
+                                    </div>
+                                    <h3 class="display font-bold text-stone-900 trick-title">GOOGLETRANSLATE() — bulk-translate family communications</h3>
+                                </div>
+                                <span class="text-2xl text-stone-400 shrink-0 trick-icon font-light" aria-hidden="true">›</span>
+                            </button>
+                            <div id="body-6" class="trick-body hidden px-4 sm:px-5 pb-5 pt-2 border-t border-stone-100 bg-stone-50/40">
+                                <p class="text-stone-700 mb-4 leading-relaxed">Draft a message column in English, translate the whole column to Spanish, Vietnamese, or Arabic in a single formula. Great for outreach, permission slips, and family-facing signage.</p>
+                                <div class="p-3 bg-stone-900 text-stone-100 rounded-xl flex justify-between items-center font-mono text-xs sm:text-sm gap-3">
+                                    <span class="truncate">=GOOGLETRANSLATE(A2, "en", "es")</span>
+                                    <button type="button" onclick="copyText('=GOOGLETRANSLATE(A2, &quot;en&quot;, &quot;es&quot;)', this)" aria-label="Copy translate formula" class="bg-[#002f60] hover:bg-[#001f40] text-white px-3 py-1 rounded transition text-xs shrink-0 focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-offset-2 focus:ring-offset-stone-900">Copy</button>
+                                </div>
+                                <p class="text-xs text-stone-500 mt-3">Second argument = source language, third = target. Use <code class="text-[#002f60]">"auto"</code> for auto-detect. Language codes: es (Spanish), vi (Vietnamese), ar (Arabic), fr (French).</p>
+                            </div>
+                        </article>
+                    </li>
+
+                    <li>
+                        <article class="trick bg-white rounded-xl border border-stone-200 hover:border-[#e47727] transition-colors overflow-hidden" data-category="ai" data-open="false">
+                            <button type="button" onclick="toggleTrick(this)" aria-expanded="false" aria-controls="body-7" class="w-full text-left px-4 sm:px-5 py-4 flex items-center gap-4 focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-inset">
+                                <span class="text-2xl shrink-0" aria-hidden="true">🚀</span>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center flex-wrap gap-1.5 mb-1">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full">AI Prompt</span>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider bg-stone-100 text-stone-700 px-2 py-0.5 rounded-full">Easy</span>
+                                        <span class="text-[10px] font-semibold text-stone-500">⏱ 15+ min saved per text</span>
+                                    </div>
+                                    <h3 class="display font-bold text-stone-900 trick-title">Reading-level translator — differentiate any text in seconds</h3>
+                                </div>
+                                <span class="text-2xl text-stone-400 shrink-0 trick-icon font-light" aria-hidden="true">›</span>
+                            </button>
+                            <div id="body-7" class="trick-body hidden px-4 sm:px-5 pb-5 pt-2 border-t border-stone-100 bg-stone-50/40">
+                                <p class="text-stone-700 mb-4 leading-relaxed">Paste any dense text and get an accessible version at the reading level you need. Preserves core vocabulary but restructures sentences. Works in Gemini, Claude, or ChatGPT.</p>
+                                <div class="p-3 bg-stone-900 text-stone-100 rounded-xl flex justify-between items-start font-mono text-xs gap-3">
+                                    <span>"Rewrite this text at a 3rd-grade reading level. Maintain the key vocabulary words but shorten sentence structures."</span>
+                                    <button type="button" onclick="copyText('Rewrite this text at a 3rd-grade reading level. Maintain the key vocabulary words but shorten sentence structures.', this)" aria-label="Copy prompt" class="bg-[#002f60] hover:bg-[#001f40] text-white px-3 py-1 rounded transition text-xs shrink-0 focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-offset-2 focus:ring-offset-stone-900">Copy</button>
+                                </div>
+                            </div>
+                        </article>
+                    </li>
+
+                    <li>
+                        <article class="trick bg-white rounded-xl border border-stone-200 hover:border-[#e47727] transition-colors overflow-hidden" data-category="ai" data-open="false">
+                            <button type="button" onclick="toggleTrick(this)" aria-expanded="false" aria-controls="body-8" class="w-full text-left px-4 sm:px-5 py-4 flex items-center gap-4 focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-inset">
+                                <span class="text-2xl shrink-0" aria-hidden="true">🎯</span>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center flex-wrap gap-1.5 mb-1">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full">AI Prompt</span>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider bg-stone-100 text-stone-700 px-2 py-0.5 rounded-full">Intermediate</span>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full">NEW</span>
+                                        <span class="text-[10px] font-semibold text-stone-500">⏱ 20+ min per IEP note</span>
+                                    </div>
+                                    <h3 class="display font-bold text-stone-900 trick-title">IEP progress note drafter — turn observations into strengths-based language</h3>
+                                </div>
+                                <span class="text-2xl text-stone-400 shrink-0 trick-icon font-light" aria-hidden="true">›</span>
+                            </button>
+                            <div id="body-8" class="trick-body hidden px-4 sm:px-5 pb-5 pt-2 border-t border-stone-100 bg-stone-50/40">
+                                <p class="text-stone-700 mb-4 leading-relaxed">Feed raw observation notes to Gemini and get an IEP-appropriate first draft. Human review always required (per FLS policy) — but this saves the "how do I phrase this?" work.</p>
+                                <div class="p-3 bg-stone-900 text-stone-100 rounded-xl flex justify-between items-start font-mono text-xs gap-3">
+                                    <span>"You are helping a special education teacher draft an IEP progress note. Given these observations: [paste notes], write a progress summary in professional, strengths-based language covering: current performance, progress toward the goal, and next steps. Do not fabricate data."</span>
+                                    <button type="button" onclick="copyText('You are helping a special education teacher draft an IEP progress note. Given these observations: [paste notes], write a progress summary in professional, strengths-based language covering: current performance, progress toward the goal, and next steps. Do not fabricate data.', this)" aria-label="Copy prompt" class="bg-[#002f60] hover:bg-[#001f40] text-white px-3 py-1 rounded transition text-xs shrink-0 focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-offset-2 focus:ring-offset-stone-900">Copy</button>
+                                </div>
+                                <p class="text-xs text-stone-500 mt-3">⚠ Always review, verify, and edit before finalizing. This drafts language — you own the accuracy.</p>
+                            </div>
+                        </article>
+                    </li>
+
+                </ul>
+                <p id="noResults" class="hidden text-center text-stone-500 mt-8 py-8">No tricks match your search. Try a different keyword or clear filters.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-stone-200 py-8 px-4 sm:px-6 text-center">
+        <div class="max-w-6xl mx-auto text-sm text-stone-600">
+            <p>Part of AI at FirstLine · <a href="mock-3-version-c.html" class="text-[#002f60] hover:text-[#e47727] font-semibold underline focus:outline-none focus:ring-2 focus:ring-[#e47727] focus:ring-offset-2 rounded">Back to main →</a></p>
+            <p class="mt-2 text-xs text-stone-500">More tricks added weekly. Have one to share? <a href="mailto:talent@firstlineschools.org" class="text-[#002f60] hover:text-[#e47727] underline">Email us</a>.</p>
+        </div>
+    </footer>
+
+    <script>
+        let activeCategory = 'all';
+        let activeSearch = '';
+
+        function toggleTrick(button) {
+            const article = button.closest('.trick');
+            const isOpen = article.getAttribute('data-open') === 'true';
+            article.setAttribute('data-open', !isOpen);
+            button.setAttribute('aria-expanded', !isOpen);
+        }
+
+        function copyText(text, btn) {
+            navigator.clipboard.writeText(text);
+            const originalText = btn.textContent;
+            btn.textContent = 'Copied!';
+            btn.classList.add('bg-emerald-600');
+            btn.classList.remove('bg-[#002f60]');
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.classList.remove('bg-emerald-600');
+                btn.classList.add('bg-[#002f60]');
+            }, 1500);
+        }
+
+        function setFilter(category, btn) {
+            activeCategory = category;
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.setAttribute('aria-pressed', 'false');
+                chip.classList.remove('bg-[#002f60]', 'text-white', 'border-[#002f60]');
+                chip.classList.add('bg-white', 'text-stone-700', 'border-stone-300');
+            });
+            btn.setAttribute('aria-pressed', 'true');
+            btn.classList.remove('bg-white', 'text-stone-700', 'border-stone-300');
+            btn.classList.add('bg-[#002f60]', 'text-white', 'border-[#002f60]');
+            applyFilters();
+        }
+
+        function filterTricks() {
+            activeSearch = document.getElementById('searchInput').value.toLowerCase();
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const tricks = document.querySelectorAll('.trick');
+            let visibleCount = 0;
+            tricks.forEach(trick => {
+                const category = trick.getAttribute('data-category');
+                const text = trick.textContent.toLowerCase();
+                const matchesCategory = activeCategory === 'all' || category === activeCategory;
+                const matchesSearch = activeSearch === '' || text.includes(activeSearch);
+                const shouldShow = matchesCategory && matchesSearch;
+                trick.parentElement.style.display = shouldShow ? '' : 'none';
+                if (shouldShow) visibleCount++;
+            });
+            document.getElementById('noResults').classList.toggle('hidden', visibleCount > 0);
+        }
+    </script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.querySelector('button[aria-label="Open menu"]');
+    const nav = document.getElementById('site-nav');
+    if (!btn || !nav) return;
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      nav.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', nav.classList.contains('is-open'));
+    });
+    // Close on link click
+    nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nav.classList.remove('is-open')));
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+      if (nav.classList.contains('is-open') && !nav.contains(e.target) && e.target !== btn) {
+        nav.classList.remove('is-open');
+      }
+    });
+  });
+</script>
+</body>
+</html>
