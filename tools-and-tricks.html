@@ -379,6 +379,7 @@
             container.innerHTML = approved.map((row, i) => renderTip(row, i + 1)).join('');
           }
           document.getElementById('tipsCount').textContent = `${approved.length} approved ${approved.length === 1 ? 'tip' : 'tips'} · Refresh to see new submissions`;
+          openAndScrollToHash();
         },
         error: function(err) {
           document.getElementById('tipsList').innerHTML = '<div class="p-5 border border-red-300 rounded-lg text-sm text-red-800">Could not load tips: ' + err.message + '</div>';
@@ -426,7 +427,24 @@
       }, 1500);
     }
 
+    function openAndScrollToHash() {
+      const hash = (window.location.hash || '').replace(/^#/, '');
+      if (!hash) return;
+      const article = document.getElementById(hash);
+      if (!article) return;
+      const details = article.querySelector('details');
+      if (details) details.open = true;
+      // Wait a frame so layout settles after opening the accordion.
+      requestAnimationFrame(() => {
+        article.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        article.classList.add('ring-2', 'ring-[#e47727]', 'ring-offset-2');
+        setTimeout(() => article.classList.remove('ring-2', 'ring-[#e47727]', 'ring-offset-2'), 2500);
+      });
+    }
+
+    window.addEventListener('hashchange', openAndScrollToHash);
+
     loadTips();
-  </script>
+</script>
 </body>
 </html>
