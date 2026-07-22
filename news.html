@@ -322,6 +322,9 @@
           const isFeatured = !!((r.Featured || '').trim());
           const age = daysSince(parseTimestamp(r.Timestamp));
 
+          // Bright Spots live on the Staff page, not News.
+          if (type === 'bright spot') return;
+
           if (type === 'internal') {
             internal.push(r);
           } else {
