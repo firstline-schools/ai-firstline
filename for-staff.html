@@ -243,7 +243,7 @@
     // Optional editor-provided overrides
     const blurbTitle = (row['Blurb Title'] || '').trim();
     const blurbBody = (row['Blurb Body'] || '').trim();
-    const isFeatured = !!((row['Featured Date'] || '').trim());
+    const isFeatured = !!(((row['Featured'] || row['Featured Date']) || '').trim());
 
     const headline = blurbTitle || teammate;
     const roleLocation = [role, location].filter(Boolean).join(' · ');
