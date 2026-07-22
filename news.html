@@ -5,6 +5,7 @@
 <title>News — AI at FirstLine</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   body { font-family: 'Open Sans', Arial, sans-serif; background: #ffffff; color: #333; }
@@ -14,6 +15,10 @@
   #site-nav.is-open { display: flex !important; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: #ffffff; padding: 1rem 1.5rem; box-shadow: 0 8px 24px rgba(0,0,0,0.08); z-index: 30; border-top: 1px solid #e7e5e4; gap: 0.25rem; }
   #site-nav.is-open a { padding: 0.75rem 0; border-bottom: 1px solid #f5f5f4; }
   #site-nav.is-open a:last-child { border-bottom: 0; }
+
+  .cat-chip { border-color: #e7e5e4; color: #57534e; background: #ffffff; }
+  .cat-chip:hover { border-color: #002f60; color: #002f60; }
+  .cat-chip.active { background: #002f60; color: #ffffff; border-color: #002f60; }
 </style>
 </head>
 <body>
@@ -54,143 +59,68 @@
       <div class="max-w-6xl mx-auto px-4 sm:px-6">
         <div class="text-xs font-bold text-[#e47727] tracking-widest uppercase mb-3">Equity · Excellence · Future-Ready Learning</div>
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#002f60] leading-tight mb-4">News & Announcements</h1>
-        <p class="text-lg text-stone-700 leading-relaxed max-w-3xl">FLS updates, curated AI-in-education news, tool changes, and the tip of the day — reviewed by a human before posting.</p>
+        <p class="text-lg text-stone-700 leading-relaxed max-w-3xl">FLS updates and AI-in-education news, filtered by an agent for what matters to K-8 charter work, human-reviewed before posting.</p>
         <div class="text-[10px] font-semibold uppercase tracking-widest text-stone-500 flex flex-wrap gap-3 mt-4">
-          <span>🤖 AI-curated (agentic pipeline in build)</span>
+          <span>🤖 AI-curated daily</span>
           <span>👤 Human-reviewed</span>
-          <span>📅 Daily</span>
+          <span id="lastUpdated"></span>
         </div>
       </div>
     </section>
 
-    <section class="py-12 bg-white">
+    <!-- Category filter chips -->
+    <section class="py-4 bg-white border-b border-stone-200 sticky top-16 z-10">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-wrap gap-2" id="filterChips">
+        <button data-cat="all" class="cat-chip active px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border">All</button>
+        <button data-cat="Policy" class="cat-chip px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border">Policy</button>
+        <button data-cat="Tools" class="cat-chip px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border">Tools</button>
+        <button data-cat="Research" class="cat-chip px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border">Research</button>
+        <button data-cat="Curriculum" class="cat-chip px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border">Curriculum</button>
+        <button data-cat="Compliance" class="cat-chip px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border">Compliance</button>
+        <button data-cat="Leadership" class="cat-chip px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border">Leadership</button>
+        <button data-cat="Families" class="cat-chip px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border">Families</button>
+      </div>
+    </section>
+
+    <!-- FLS Updates (internal items) -->
+    <section class="py-12 bg-white" id="internalSection">
       <div class="max-w-6xl mx-auto px-4 sm:px-6">
         <div class="text-xs font-bold text-[#e47727] tracking-widest uppercase mb-2">FLS Updates</div>
         <h2 class="text-2xl font-extrabold text-[#002f60] mb-6">What's happening at FirstLine</h2>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <article class="border border-stone-200 rounded-lg p-5 hover:shadow-md transition-shadow">
-            <div class="flex items-center gap-2 text-[10px] font-bold mb-2">
-              <span class="px-2 py-0.5 bg-green-100 text-green-800 rounded uppercase tracking-wider">Policy</span>
-              <span class="text-stone-500">July 2026</span>
-            </div>
-            <h3 class="text-base font-bold text-[#002f60] leading-snug mb-2">Staff AI Usage Policy updated.</h3>
-            <p class="text-xs text-stone-600 leading-relaxed">Version 070126 posted with clarified guidance on grading and student-data handling.</p>
-          </article>
-          <article class="border border-stone-200 rounded-lg p-5 hover:shadow-md transition-shadow">
-            <div class="flex items-center gap-2 text-[10px] font-bold mb-2">
-              <span class="px-2 py-0.5 bg-orange-100 text-[#e47727] rounded uppercase tracking-wider">Tools</span>
-              <span class="text-stone-500">July 2026</span>
-            </div>
-            <h3 class="text-base font-bold text-[#002f60] leading-snug mb-2">PlayLab rolling out this fall.</h3>
-            <p class="text-xs text-stone-600 leading-relaxed">Nonprofit platform where teachers build AI apps for classroom use. Details coming.</p>
-          </article>
-          <article class="border border-stone-200 rounded-lg p-5 hover:shadow-md transition-shadow">
-            <div class="flex items-center gap-2 text-[10px] font-bold mb-2">
-              <span class="px-2 py-0.5 bg-blue-100 text-[#002f60] rounded uppercase tracking-wider">Families</span>
-              <span class="text-stone-500">June 2026</span>
-            </div>
-            <h3 class="text-base font-bold text-[#002f60] leading-snug mb-2">Parent guide video is live.</h3>
-            <p class="text-xs text-stone-600 leading-relaxed">A short video from CIO Scott Shirey explaining AI at FirstLine — <a href="for-families.html" class="text-[#002f60] hover:text-[#e47727] underline">watch here</a>.</p>
-          </article>
-          <article class="border border-stone-200 rounded-lg p-5 hover:shadow-md transition-shadow">
-            <div class="flex items-center gap-2 text-[10px] font-bold mb-2">
-              <span class="px-2 py-0.5 bg-green-100 text-green-800 rounded uppercase tracking-wider">Tools</span>
-              <span class="text-stone-500">May 2026</span>
-            </div>
-            <h3 class="text-base font-bold text-[#002f60] leading-snug mb-2">Gemini Enterprise approved.</h3>
-            <p class="text-xs text-stone-600 leading-relaxed">Google Cloud's no-code AI platform now approved for staff productivity use.</p>
-          </article>
-          <article class="border border-stone-200 rounded-lg p-5 hover:shadow-md transition-shadow">
-            <div class="flex items-center gap-2 text-[10px] font-bold mb-2">
-              <span class="px-2 py-0.5 bg-blue-100 text-[#002f60] rounded uppercase tracking-wider">Leadership</span>
-              <span class="text-stone-500">May 2026</span>
-            </div>
-            <h3 class="text-base font-bold text-[#002f60] leading-snug mb-2">Scott Shirey joins as CIO.</h3>
-            <p class="text-xs text-stone-600 leading-relaxed">FirstLine's first Chief Innovation Officer joins the network to lead AI strategy.</p>
-          </article>
-          <article class="border border-stone-200 rounded-lg p-5 hover:shadow-md transition-shadow">
-            <div class="flex items-center gap-2 text-[10px] font-bold mb-2">
-              <span class="px-2 py-0.5 bg-stone-200 text-stone-700 rounded uppercase tracking-wider">Task Force</span>
-              <span class="text-stone-500">April 2026</span>
-            </div>
-            <h3 class="text-base font-bold text-[#002f60] leading-snug mb-2">AI Task Force convened.</h3>
-            <p class="text-xs text-stone-600 leading-relaxed">Sixteen teachers, leaders, and parents form the working group. <a href="task-force.html" class="text-[#002f60] hover:text-[#e47727] underline">Meet the group</a>.</p>
-          </article>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" id="internalList">
+          <div class="p-5 border border-dashed border-stone-300 rounded-lg text-sm text-stone-500 italic">Internal announcements will appear here as they're added.</div>
         </div>
       </div>
     </section>
 
-    <section class="py-12 bg-stone-50 border-y border-stone-200">
+    <!-- Featured External (pinned indefinitely, no retention limit) -->
+    <section class="py-8 bg-stone-50 border-t border-stone-200" id="featuredSection" style="display:none;">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="text-xs font-bold text-[#e47727] tracking-widest uppercase mb-4">Featured — kept on the page longer</div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" id="featuredList"></div>
+      </div>
+    </section>
+
+    <!-- Recent External (30-day retention, capped at 12 visible + Show older) -->
+    <section class="py-12 bg-stone-50 border-t border-stone-200" id="externalSection">
       <div class="max-w-6xl mx-auto px-4 sm:px-6">
         <div class="flex flex-wrap items-end justify-between gap-3 mb-6">
           <div>
             <div class="text-xs font-bold text-[#e47727] tracking-widest uppercase mb-2">Stay Current · External</div>
             <h2 class="text-2xl font-extrabold text-[#002f60]">AI in Education</h2>
-            <p class="text-stone-700 text-sm mt-1">News from across AI and education, filtered for what matters to FirstLine's work.</p>
+            <p class="text-stone-700 text-sm mt-1">Filtered daily for what matters to FirstLine's K-8 work.</p>
           </div>
         </div>
-
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <article class="bg-white rounded-lg p-5 border border-stone-200">
-            <div class="flex items-center gap-2 text-[10px] font-bold mb-2">
-              <span class="px-2 py-0.5 bg-amber-100 text-amber-900 rounded uppercase tracking-wider">Example</span>
-              <span class="text-stone-500">Pipeline · fall 2026</span>
-            </div>
-            <div class="text-[10px] font-bold uppercase tracking-widest text-stone-500 mb-2">U.S. Dept of Education</div>
-            <h3 class="text-base font-bold text-[#002f60] leading-snug mb-2">Federal AI guidance updated for K-12 districts.</h3>
-            <div class="text-xs text-stone-700 italic pt-2 border-t border-stone-100"><strong class="not-italic text-stone-900">Why it matters:</strong> Direct input to our Student Usage Policy.</div>
-          </article>
-          <article class="bg-white rounded-lg p-5 border border-stone-200">
-            <div class="flex items-center gap-2 text-[10px] font-bold mb-2">
-              <span class="px-2 py-0.5 bg-amber-100 text-amber-900 rounded uppercase tracking-wider">Example</span>
-              <span class="text-stone-500">Pipeline · fall 2026</span>
-            </div>
-            <div class="text-[10px] font-bold uppercase tracking-widest text-stone-500 mb-2">Louisiana DOE</div>
-            <h3 class="text-base font-bold text-[#002f60] leading-snug mb-2">State releases AI literacy framework for grades 3–8.</h3>
-            <div class="text-xs text-stone-700 italic pt-2 border-t border-stone-100"><strong class="not-italic text-stone-900">Why it matters:</strong> Direct implication for our network. CAO + curriculum to review.</div>
-          </article>
-          <article class="bg-white rounded-lg p-5 border border-stone-200">
-            <div class="flex items-center gap-2 text-[10px] font-bold mb-2">
-              <span class="px-2 py-0.5 bg-amber-100 text-amber-900 rounded uppercase tracking-wider">Example</span>
-              <span class="text-stone-500">Pipeline · fall 2026</span>
-            </div>
-            <div class="text-[10px] font-bold uppercase tracking-widest text-stone-500 mb-2">Google Workspace</div>
-            <h3 class="text-base font-bold text-[#002f60] leading-snug mb-2">Gemini Enterprise adds SPED-focused agent templates.</h3>
-            <div class="text-xs text-stone-700 italic pt-2 border-t border-stone-100"><strong class="not-italic text-stone-900">Why it matters:</strong> Four Task Force members lead SPED work.</div>
-          </article>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" id="externalList">
+          <div class="p-5 border border-dashed border-stone-300 rounded-lg text-sm text-stone-500 italic col-span-full">Loading the latest…</div>
         </div>
-
-        <p class="mt-6 text-xs text-stone-600 italic">Tiles above are illustrative. Live pipeline launches fall 2026 — a Gemini agent scans EdSurge, Education Week, K-12 Dive, Louisiana DOE, and district CIO communities daily; top picks human-reviewed before posting.</p>
-      </div>
-    </section>
-
-    <section class="py-12 bg-white">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 grid lg:grid-cols-2 gap-6">
-        <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-6">
-          <div class="text-xs font-bold text-[#e47727] tracking-widest uppercase mb-2">Tip of the Day</div>
-          <div class="text-[10px] font-bold uppercase tracking-wider text-stone-500 mb-3">Today</div>
-          <div class="text-3xl mb-2">💡</div>
-          <h3 class="text-xl font-bold text-[#002f60] leading-snug mb-2">Let Gemini triage your inbox.</h3>
-          <p class="text-sm text-stone-700 leading-relaxed">Ask it to find emails awaiting your reply this week, then draft acknowledgments. Workspace-connected — no copy-paste.</p>
-          <a href="tools-and-tricks.html" class="text-sm font-semibold text-[#002f60] hover:text-[#e47727] mt-4 inline-block">More tricks →</a>
-        </div>
-        <div class="bg-white border border-stone-200 rounded-lg p-6">
-          <div class="text-xs font-bold text-[#e47727] tracking-widest uppercase mb-2">Approved Tool Changes</div>
-          <div class="text-[10px] font-bold uppercase tracking-wider text-stone-500 mb-3">This month</div>
-          <ul class="space-y-3">
-            <li class="pb-3 border-b border-stone-100">
-              <div class="text-sm font-semibold text-stone-900">PlayLab added</div>
-              <div class="text-xs text-stone-600">Rolling out fall 2026 · Nonprofit platform for teacher-built AI apps.</div>
-            </li>
-            <li>
-              <div class="text-sm font-semibold text-stone-900">CourseMojo confirmed in use</div>
-              <div class="text-xs text-stone-600">Now listed on the Policies page transparent tools list.</div>
-            </li>
-          </ul>
-          <a href="policies.html#tools" class="text-sm font-semibold text-[#002f60] hover:text-[#e47727] mt-4 inline-block">Full tool list →</a>
+        <div class="text-center mt-6" id="showOlderWrap" style="display:none;">
+          <button id="showOlderBtn" class="text-sm font-semibold text-[#002f60] hover:text-[#e47727] underline">Show older articles →</button>
         </div>
       </div>
     </section>
+
+
   </main>
 
   <footer class="bg-[#002f60] text-stone-200">
@@ -223,6 +153,191 @@
       </div>
     </div>
   </footer>
+<script>
+  const NEWS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQb6x49fkcMBK9u4sNDqT_Fcd8o72A_8O05d6NVqERI73Nx38qmtH9PLCbRCfUqxI75_LrX4UwjcJXB/pub?output=csv';
+  const DEFAULT_RETENTION_DAYS = 30;
+  const MAX_RECENT_TILES = 12;
+
+  const CATEGORY_COLORS = {
+    'Policy':      'bg-green-100 text-green-800',
+    'Tools':       'bg-orange-100 text-[#e47727]',
+    'Research':    'bg-blue-100 text-[#002f60]',
+    'Curriculum':  'bg-purple-100 text-purple-800',
+    'Compliance':  'bg-red-100 text-red-800',
+    'Leadership':  'bg-blue-100 text-[#002f60]',
+    'Families':    'bg-amber-100 text-amber-900',
+    'Task Force':  'bg-stone-200 text-stone-700',
+  };
+
+  function escapeHtml(s) {
+    return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function parseTimestamp(s) {
+    const t = Date.parse(s || '');
+    return isNaN(t) ? 0 : t;
+  }
+
+  function daysSince(ts) {
+    if (!ts) return Infinity;
+    return (Date.now() - ts) / (1000 * 60 * 60 * 24);
+  }
+
+  function catBadgeClass(cat) {
+    return CATEGORY_COLORS[cat] || 'bg-stone-200 text-stone-700';
+  }
+
+  function fmtDate(ts) {
+    if (!ts) return '';
+    return new Date(ts).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  }
+
+  function tileInternal(row) {
+    const cat = row.Category || 'Update';
+    const ts = parseTimestamp(row.Timestamp);
+    const headline = row.Headline || 'Untitled';
+    const summary = row.Summary || '';
+    const url = row.URL || '';
+    return `
+      <article class="border border-stone-200 rounded-lg p-5 hover:shadow-md transition-shadow" data-cat="${escapeHtml(cat)}">
+        <div class="flex items-center gap-2 text-[10px] font-bold mb-2">
+          <span class="px-2 py-0.5 ${catBadgeClass(cat)} rounded uppercase tracking-wider">${escapeHtml(cat)}</span>
+          <span class="text-stone-500">${escapeHtml(fmtDate(ts))}</span>
+        </div>
+        <h3 class="text-base font-bold text-[#002f60] leading-snug mb-2">${escapeHtml(headline)}</h3>
+        <p class="text-xs text-stone-600 leading-relaxed">${escapeHtml(summary)}${url ? ` <a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="text-[#002f60] hover:text-[#e47727] underline">Read more →</a>` : ''}</p>
+      </article>`;
+  }
+
+  function tileExternal(row) {
+    const cat = row.Category || 'Research';
+    const source = row.Source || '';
+    const headline = row.Headline || 'Untitled';
+    const summary = row.Summary || '';
+    const why = row['Why it Matters'] || row['Why it matters'] || '';
+    const url = row.URL || '';
+    return `
+      <article class="bg-white rounded-lg p-5 border border-stone-200 hover:shadow-md transition-shadow" data-cat="${escapeHtml(cat)}">
+        <div class="flex items-center gap-2 text-[10px] font-bold mb-2">
+          <span class="px-2 py-0.5 ${catBadgeClass(cat)} rounded uppercase tracking-wider">${escapeHtml(cat)}</span>
+        </div>
+        <div class="text-[10px] font-bold uppercase tracking-widest text-stone-500 mb-2">${escapeHtml(source)}</div>
+        <h3 class="text-base font-bold text-[#002f60] leading-snug mb-2">${url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="hover:text-[#e47727]">${escapeHtml(headline)} ↗</a>` : escapeHtml(headline)}</h3>
+        ${summary ? `<p class="text-xs text-stone-600 leading-relaxed mb-2">${escapeHtml(summary)}</p>` : ''}
+        ${why ? `<div class="text-xs text-stone-700 italic pt-2 border-t border-stone-100"><strong class="not-italic text-stone-900">Why it matters:</strong> ${escapeHtml(why)}</div>` : ''}
+      </article>`;
+  }
+
+  let state = { internal: [], featured: [], recent: [], older: [], showingOlder: false, activeCat: 'all' };
+
+  function render() {
+    const catFilter = state.activeCat;
+    const passes = r => catFilter === 'all' || (r.Category || '').toLowerCase() === catFilter.toLowerCase();
+
+    // Internal
+    const internal = state.internal.filter(passes);
+    document.getElementById('internalList').innerHTML = internal.length
+      ? internal.map(tileInternal).join('')
+      : '<div class="p-5 border border-dashed border-stone-300 rounded-lg text-sm text-stone-500 italic col-span-full">No FLS updates in this category yet.</div>';
+
+    // Featured external
+    const featured = state.featured.filter(passes);
+    document.getElementById('featuredSection').style.display = featured.length ? '' : 'none';
+    document.getElementById('featuredList').innerHTML = featured.map(tileExternal).join('');
+
+    // Recent + older
+    const recent = state.recent.filter(passes).slice(0, MAX_RECENT_TILES);
+    const older = state.older.filter(passes);
+    const externalList = document.getElementById('externalList');
+    const externalTiles = state.showingOlder ? recent.concat(older) : recent;
+    externalList.innerHTML = externalTiles.length
+      ? externalTiles.map(tileExternal).join('')
+      : '<div class="p-5 border border-dashed border-stone-300 rounded-lg text-sm text-stone-500 italic col-span-full">No external items in this category yet.</div>';
+
+    const wrap = document.getElementById('showOlderWrap');
+    const btn = document.getElementById('showOlderBtn');
+    if (older.length && !state.showingOlder) {
+      wrap.style.display = '';
+      btn.textContent = `Show ${older.length} older ${older.length === 1 ? 'article' : 'articles'} →`;
+    } else {
+      wrap.style.display = 'none';
+    }
+  }
+
+  function loadNews() {
+    Papa.parse(NEWS_CSV, {
+      download: true,
+      header: true,
+      skipEmptyLines: true,
+      complete: function(results) {
+        const rows = (results.data || []).filter(r => (r['Draft Status'] || '').toLowerCase() === 'approved');
+
+        // Sort by timestamp desc
+        rows.sort((a, b) => parseTimestamp(b.Timestamp) - parseTimestamp(a.Timestamp));
+
+        const internal = [];
+        const featured = [];
+        const recent = [];
+        const older = [];
+
+        rows.forEach(r => {
+          const type = (r.Type || '').toLowerCase();
+          const isFeatured = !!((r.Featured || '').trim());
+          const age = daysSince(parseTimestamp(r.Timestamp));
+
+          if (type === 'internal') {
+            internal.push(r);
+          } else {
+            if (isFeatured) {
+              featured.push(r);
+            } else if (age <= DEFAULT_RETENTION_DAYS) {
+              recent.push(r);
+            } else if (age <= 90) {
+              older.push(r);
+            }
+            // items > 90 days without Featured are dropped from the site (still in Sheet)
+          }
+        });
+
+        state.internal = internal;
+        state.featured = featured;
+        state.recent = recent;
+        state.older = older;
+        render();
+
+        const lastTs = rows.length ? parseTimestamp(rows[0].Timestamp) : 0;
+        if (lastTs) {
+          document.getElementById('lastUpdated').textContent = `Last item: ${new Date(lastTs).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+        }
+      },
+      error: function(err) {
+        document.getElementById('externalList').innerHTML = `<div class="p-5 border border-red-300 rounded-lg text-sm text-red-800 col-span-full">Could not load news: ${escapeHtml(err.message || '')}</div>`;
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Category chip filters
+    document.querySelectorAll('.cat-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        state.activeCat = chip.dataset.cat;
+        state.showingOlder = false;
+        render();
+      });
+    });
+
+    // Show older
+    document.getElementById('showOlderBtn').addEventListener('click', () => {
+      state.showingOlder = true;
+      render();
+    });
+
+    loadNews();
+  });
+</script>
+
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const btn = document.querySelector('button[aria-label="Open menu"]');
