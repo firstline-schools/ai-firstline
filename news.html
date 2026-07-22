@@ -16,9 +16,9 @@
   #site-nav.is-open a { padding: 0.75rem 0; border-bottom: 1px solid #f5f5f4; }
   #site-nav.is-open a:last-child { border-bottom: 0; }
 
-  .cat-chip { border-color: #e7e5e4; color: #57534e; background: #ffffff; }
-  .cat-chip:hover { border-color: #002f60; color: #002f60; }
-  .cat-chip.active { background: #002f60; color: #ffffff; border-color: #002f60; }
+  .cat-chip { color: #57534e; border: none; background: transparent; border-left: 2px solid transparent; margin-left: -1px; font-weight: 500; cursor: pointer; }
+  .cat-chip:hover { color: #002f60; border-left-color: #002f60; }
+  .cat-chip.active { color: #e47727; border-left-color: #e47727; font-weight: 700; }
 </style>
 </head>
 <body>
@@ -68,78 +68,94 @@
       </div>
     </section>
 
-    <!-- Category filter chips -->
-    <section class="py-4 bg-white border-b border-stone-200 sticky top-16 z-10">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-wrap gap-2" id="filterChips">
-        <button data-cat="all" class="cat-chip active px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border">All</button>
-        <button data-cat="Policy" class="cat-chip px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border">Policy</button>
-        <button data-cat="Tools" class="cat-chip px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border">Tools</button>
-        <button data-cat="Research" class="cat-chip px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border">Research</button>
-        <button data-cat="Curriculum" class="cat-chip px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border">Curriculum</button>
-        <button data-cat="Compliance" class="cat-chip px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border">Compliance</button>
-        <button data-cat="Leadership" class="cat-chip px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border">Leadership</button>
-        <button data-cat="Families" class="cat-chip px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border">Families</button>
-      </div>
-    </section>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 grid lg:grid-cols-[220px_1fr] xl:grid-cols-[260px_1fr] gap-8 lg:gap-12">
 
-    <!-- FLS Updates (internal items) -->
-    <section class="py-12 bg-white" id="internalSection">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6">
-        <div class="text-xs font-bold text-[#e47727] tracking-widest uppercase mb-2">FLS Updates</div>
-        <h2 class="text-2xl font-extrabold text-[#002f60] mb-6">What's happening at FirstLine</h2>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" id="internalList">
-          <div class="p-5 border border-dashed border-stone-300 rounded-lg text-sm text-stone-500 italic">Internal announcements will appear here as they're added.</div>
-        </div>
-      </div>
-    </section>
+      <aside class="lg:sticky lg:top-24 lg:self-start lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto" aria-label="News navigation">
+        <nav aria-label="Section navigation">
+          <div class="text-[10px] font-bold uppercase tracking-widest text-stone-500 mb-3">Contents</div>
+          <ul class="space-y-0.5 border-l border-stone-200 mb-6">
+            <li><a href="#internalSection" class="block pl-3 py-1.5 text-sm text-stone-700 hover:text-[#e47727] hover:border-l-2 hover:border-[#e47727] hover:-ml-px">📢 FLS Updates</a></li>
+            <li><a href="#bright-spots" class="block pl-3 py-1.5 text-sm text-stone-700 hover:text-[#e47727] hover:border-l-2 hover:border-[#e47727] hover:-ml-px">⭐ Bright Spots</a></li>
+            <li><a href="#featuredSection" class="block pl-3 py-1.5 text-sm text-stone-700 hover:text-[#e47727] hover:border-l-2 hover:border-[#e47727] hover:-ml-px">📌 Featured</a></li>
+            <li><a href="#externalSection" class="block pl-3 py-1.5 text-sm text-stone-700 hover:text-[#e47727] hover:border-l-2 hover:border-[#e47727] hover:-ml-px">🌍 Stay Current</a></li>
+          </ul>
 
-    <!-- Bright Spots — teammate celebrations (Celebrate form response Sheet) -->
-    <section id="bright-spots" class="py-12 bg-orange-50 border-t border-orange-200">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6">
-        <div class="flex flex-wrap items-end justify-between gap-3 mb-6">
-          <div>
-            <div class="text-xs font-bold text-[#e47727] tracking-widest uppercase mb-2">Bright Spots</div>
-            <h2 class="text-2xl font-extrabold text-[#002f60]">Teammates doing great AI work</h2>
-            <p class="text-stone-700 text-sm mt-1">Curated celebrations from across FirstLine. <a href="for-staff.html#celebrate" class="text-[#002f60] hover:text-[#e47727] underline font-semibold">Nominate a teammate →</a></p>
+          <div class="text-[10px] font-bold uppercase tracking-widest text-stone-500 mb-3">Filter by Category</div>
+          <ul class="space-y-0 border-l border-stone-200 mb-6" id="filterChips">
+            <li><button data-cat="all" class="cat-chip active w-full text-left block pl-3 py-1.5 text-sm">All</button></li>
+            <li><button data-cat="Policy" class="cat-chip w-full text-left block pl-3 py-1.5 text-sm">Policy</button></li>
+            <li><button data-cat="Tools" class="cat-chip w-full text-left block pl-3 py-1.5 text-sm">Tools</button></li>
+            <li><button data-cat="Research" class="cat-chip w-full text-left block pl-3 py-1.5 text-sm">Research</button></li>
+            <li><button data-cat="Curriculum" class="cat-chip w-full text-left block pl-3 py-1.5 text-sm">Curriculum</button></li>
+            <li><button data-cat="Compliance" class="cat-chip w-full text-left block pl-3 py-1.5 text-sm">Compliance</button></li>
+            <li><button data-cat="Leadership" class="cat-chip w-full text-left block pl-3 py-1.5 text-sm">Leadership</button></li>
+            <li><button data-cat="Families" class="cat-chip w-full text-left block pl-3 py-1.5 text-sm">Families</button></li>
+          </ul>
+
+          <div class="text-[10px] font-bold uppercase tracking-widest text-stone-500 mb-2">Contribute</div>
+          <a href="for-staff.html#celebrate" class="block text-xs text-[#002f60] hover:text-[#e47727] font-semibold pl-3 py-1">Nominate a teammate →</a>
+        </nav>
+      </aside>
+
+      <div class="min-w-0">
+
+        <!-- FLS Updates (internal items) -->
+        <section id="internalSection" class="mb-12 scroll-mt-24">
+          <div class="text-xs font-bold text-[#e47727] tracking-widest uppercase mb-2">FLS Updates</div>
+          <h2 class="text-2xl font-extrabold text-[#002f60] mb-6">What's happening at FirstLine</h2>
+          <div class="grid sm:grid-cols-2 gap-4" id="internalList">
+            <div class="p-5 border border-dashed border-stone-300 rounded-lg text-sm text-stone-500 italic">Internal announcements will appear here as they're added.</div>
           </div>
-        </div>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" id="brightSpotsList">
-          <div class="p-5 border border-dashed border-stone-300 rounded-lg text-sm text-stone-500 italic col-span-full bg-white">Loading bright spots…</div>
-        </div>
-        <div class="text-center mt-6" id="brightShowMoreWrap" style="display:none;">
-          <button id="brightShowMoreBtn" class="text-sm font-semibold text-[#002f60] hover:text-[#e47727] underline">Show more bright spots →</button>
-        </div>
-      </div>
-    </section>
+        </section>
 
-    <!-- Featured External (pinned indefinitely, no retention limit) -->
-    <section class="py-8 bg-stone-50 border-t border-stone-200" id="featuredSection" style="display:none;">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6">
-        <div class="text-xs font-bold text-[#e47727] tracking-widest uppercase mb-4">Featured — kept on the page longer</div>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" id="featuredList"></div>
-      </div>
-    </section>
+        <hr class="border-stone-200 my-10">
 
-    <!-- Recent External (30-day retention, capped at 12 visible + Show older) -->
-    <section class="py-12 bg-stone-50 border-t border-stone-200" id="externalSection">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6">
-        <div class="flex flex-wrap items-end justify-between gap-3 mb-6">
-          <div>
-            <div class="text-xs font-bold text-[#e47727] tracking-widest uppercase mb-2">Stay Current · External</div>
-            <h2 class="text-2xl font-extrabold text-[#002f60]">AI in Education</h2>
-            <p class="text-stone-700 text-sm mt-1">Filtered daily for what matters to FirstLine's K-8 work.</p>
+        <!-- Bright Spots — teammate celebrations (Celebrate form response Sheet) -->
+        <section id="bright-spots" class="mb-12 scroll-mt-24">
+          <div class="flex flex-wrap items-end justify-between gap-3 mb-6">
+            <div>
+              <div class="text-xs font-bold text-[#e47727] tracking-widest uppercase mb-2">Bright Spots</div>
+              <h2 class="text-2xl font-extrabold text-[#002f60]">Teammates doing great AI work</h2>
+              <p class="text-stone-700 text-sm mt-1">Curated celebrations from across FirstLine. <a href="for-staff.html#celebrate" class="text-[#002f60] hover:text-[#e47727] underline font-semibold">Nominate a teammate →</a></p>
+            </div>
           </div>
-        </div>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" id="externalList">
-          <div class="p-5 border border-dashed border-stone-300 rounded-lg text-sm text-stone-500 italic col-span-full">Loading the latest…</div>
-        </div>
-        <div class="text-center mt-6" id="showOlderWrap" style="display:none;">
-          <button id="showOlderBtn" class="text-sm font-semibold text-[#002f60] hover:text-[#e47727] underline">Show older articles →</button>
-        </div>
-      </div>
-    </section>
+          <div class="grid sm:grid-cols-2 gap-4" id="brightSpotsList">
+            <div class="p-5 border border-dashed border-stone-300 rounded-lg text-sm text-stone-500 italic col-span-full bg-white">Loading bright spots…</div>
+          </div>
+          <div class="text-center mt-6" id="brightShowMoreWrap" style="display:none;">
+            <button id="brightShowMoreBtn" class="text-sm font-semibold text-[#002f60] hover:text-[#e47727] underline">Show more bright spots →</button>
+          </div>
+        </section>
 
+        <hr class="border-stone-200 my-10">
 
+        <!-- Featured External (pinned indefinitely, no retention limit) -->
+        <section id="featuredSection" class="mb-12 scroll-mt-24" style="display:none;">
+          <div class="text-xs font-bold text-[#e47727] tracking-widest uppercase mb-4">Featured — kept on the page longer</div>
+          <div class="grid sm:grid-cols-2 gap-4" id="featuredList"></div>
+        </section>
+
+        <hr class="border-stone-200 my-10" id="externalDivider">
+
+        <!-- Recent External (30-day retention, capped at 12 visible + Show older) -->
+        <section id="externalSection" class="mb-12 scroll-mt-24">
+          <div class="flex flex-wrap items-end justify-between gap-3 mb-6">
+            <div>
+              <div class="text-xs font-bold text-[#e47727] tracking-widest uppercase mb-2">Stay Current · External</div>
+              <h2 class="text-2xl font-extrabold text-[#002f60]">AI in Education</h2>
+              <p class="text-stone-700 text-sm mt-1">Filtered daily for what matters to FirstLine's K-8 work.</p>
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4" id="externalList">
+            <div class="p-5 border border-dashed border-stone-300 rounded-lg text-sm text-stone-500 italic col-span-full">Loading the latest…</div>
+          </div>
+          <div class="text-center mt-6" id="showOlderWrap" style="display:none;">
+            <button id="showOlderBtn" class="text-sm font-semibold text-[#002f60] hover:text-[#e47727] underline">Show older articles →</button>
+          </div>
+        </section>
+
+      </div><!-- /min-w-0 (main column) -->
+    </div><!-- /grid -->
   </main>
 
   <footer class="bg-[#002f60] text-stone-200">
