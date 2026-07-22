@@ -40,7 +40,7 @@
         <a href="index.html" class="hover:text-[#e47727]">Home</a>
         <a href="news.html" class="hover:text-[#e47727]">News</a>
         <a href="task-force.html" class="hover:text-[#e47727]">Task Force</a>
-        <a href="policies.html" class="hover:text-[#e47727]">Policies and Protections</a>
+        <a href="policies.html" class="hover:text-[#e47727]">Policies</a>
         <a href="students.html" class="hover:text-[#e47727]">Students</a>
         <a href="for-families.html" class="hover:text-[#e47727]">Families</a>
         <a href="for-staff.html" class="text-[#e47727]" aria-current="page">Staff</a>
@@ -135,14 +135,18 @@
 
     <section id="bright-spots" class="py-12 bg-orange-50 border-t border-orange-200">
       <div class="max-w-6xl mx-auto px-4 sm:px-6">
-        <div class="text-xs font-bold text-[#e47727] tracking-widest uppercase mb-2">Bright Spots</div>
-        <h2 class="text-2xl font-extrabold text-[#002f60] mb-2">Teammates doing great AI work.</h2>
-        <p class="text-stone-700 mb-6 text-sm">Curated celebrations from across FirstLine.</p>
+        <div class="flex flex-wrap items-end justify-between gap-3 mb-6">
+          <div>
+            <div class="text-xs font-bold text-[#e47727] tracking-widest uppercase mb-2">Bright Spots</div>
+            <h2 class="text-2xl font-extrabold text-[#002f60]">Teammates doing great AI work</h2>
+            <p class="text-stone-700 mt-1 text-sm">Recent celebrations from across FirstLine.</p>
+          </div>
+        </div>
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" id="brightSpotsList">
           <div class="p-5 border border-dashed border-stone-300 rounded-lg text-sm text-stone-500 italic col-span-full bg-white">Loading bright spots…</div>
         </div>
-        <div class="text-center mt-6" id="brightShowMoreWrap" style="display:none;">
-          <button id="brightShowMoreBtn" class="text-sm font-semibold text-[#002f60] hover:text-[#e47727] underline">Show more bright spots →</button>
+        <div class="text-center mt-6">
+          <a href="news.html#bright-spots" class="text-sm font-semibold text-[#002f60] hover:text-[#e47727] underline">See all bright spots on News →</a>
         </div>
       </div>
     </section>
@@ -189,7 +193,7 @@
 <script>
   // Celebrate a Teammate form → response Sheet (published CSV).
   const BRIGHT_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTopaRD_75aPs1DunMAljmPbItpPgdXmB81cJpL2mq-u1LVHaDVgkxoFP8xgNtI0ZUq4NSEb9-SGG__/pub?output=csv';
-  const INITIAL_BRIGHT_SHOWN = 6;
+  const INITIAL_BRIGHT_SHOWN = 3;
 
   // Form field labels — must match the response Sheet headers exactly.
   const FIELD = {
@@ -274,19 +278,10 @@
     const container = document.getElementById('brightSpotsList');
     if (!brightAll.length) {
       container.innerHTML = '<div class="p-5 border border-dashed border-stone-300 rounded-lg text-sm text-stone-500 italic col-span-full bg-white">The first bright spot lands here after review. Send a celebration to start the list.</div>';
-      document.getElementById('brightShowMoreWrap').style.display = 'none';
       return;
     }
     const visible = brightAll.slice(0, brightShowing);
     container.innerHTML = visible.map(brightTile).join('');
-    const wrap = document.getElementById('brightShowMoreWrap');
-    const btn = document.getElementById('brightShowMoreBtn');
-    if (brightAll.length > brightShowing) {
-      wrap.style.display = '';
-      btn.textContent = `Show ${brightAll.length - brightShowing} more →`;
-    } else {
-      wrap.style.display = 'none';
-    }
   }
 
   function loadBrightSpots() {
@@ -315,10 +310,6 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('brightShowMoreBtn').addEventListener('click', () => {
-      brightShowing += INITIAL_BRIGHT_SHOWN;
-      renderBright();
-    });
     loadBrightSpots();
   });
 </script>
