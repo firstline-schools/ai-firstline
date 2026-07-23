@@ -244,15 +244,30 @@
     return null;
   }
 
+  // For Drive files, return a clickable thumbnail card that opens Drive in a new tab.
+  // (Drive iframe embeds get blocked by third-party cookie restrictions on mobile Safari.)
+  function drivePreview(id, alt) {
+    return `<a href="https://drive.google.com/file/d/${id}/view" target="_blank" rel="noopener" class="block relative aspect-video rounded-lg overflow-hidden border border-stone-200 mb-3 bg-stone-100 group">
+      <img src="https://drive.google.com/thumbnail?id=${id}&sz=w1000" alt="${escapeHtml(alt || '')}" class="w-full h-full object-cover" onerror="this.style.display='none'">
+      <div class="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/25 transition-colors">
+        <div class="w-14 h-14 rounded-full bg-white/95 shadow-lg flex items-center justify-center text-2xl text-[#002f60]">▶</div>
+      </div>
+      <div class="absolute bottom-2 right-2 text-[10px] font-semibold uppercase tracking-wider bg-white/90 text-stone-700 px-2 py-0.5 rounded">Open on Drive</div>
+    </a>`;
+  }
+
   function mediaMarkup(url, altText) {
-    const media = classifyMedia(url);
-    if (!media) return '';
-    if (media.kind === 'video') {
-      return `<div class="aspect-video rounded-lg overflow-hidden border border-stone-200 mb-3 bg-stone-100"><iframe src="${escapeHtml(media.src)}" class="w-full h-full" allow="autoplay; encrypted-media" allowfullscreen title="${escapeHtml(altText || '')}"></iframe></div>`;
-    }
-    if (media.kind === 'image') {
-      return `<img src="${escapeHtml(media.src)}" alt="${escapeHtml(altText || '')}" class="w-full h-40 object-cover rounded-lg border border-stone-200 mb-3">`;
-    }
+    if (!url) return '';
+    const u = url.trim();
+    if (!u) return '';
+    // YouTube — iframe works cross-browser
+    let m = u.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w-]{6,})/);
+    if (m) return `<div class="aspect-video rounded-lg overflow-hidden border border-stone-200 mb-3 bg-stone-100"><iframe src="https://www.youtube.com/embed/${m[1]}" class="w-full h-full" allow="autoplay; encrypted-media" allowfullscreen title="${escapeHtml(altText || '')}"></iframe></div>`;
+    // Google Drive — thumbnail + click-out (avoids iframe cookie issues)
+    m = u.match(/drive\.google\.com\/file\/d\/([\w-]{10,})/) || u.match(/drive\.google\.com\/(?:open|uc)\?(?:[^#]*&)?id=([\w-]{10,})/);
+    if (m) return drivePreview(m[1], altText);
+    // Direct image URL
+    if (/\.(jpe?g|png|gif|webp|avif)(\?|$)/i.test(u)) return `<img src="${escapeHtml(u)}" alt="${escapeHtml(altText || '')}" class="w-full h-40 object-cover rounded-lg border border-stone-200 mb-3">`;
     return '';
   }
 
@@ -441,7 +456,7 @@
     let m = first.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w-]{6,})/);
     if (m) return `<div class="aspect-video rounded-lg overflow-hidden border border-stone-200 mb-3 bg-stone-100"><iframe src="https://www.youtube.com/embed/${m[1]}" class="w-full h-full" allow="autoplay; encrypted-media" allowfullscreen title="${escapeHtml(alt)}"></iframe></div>`;
     const id = driveFileId(first);
-    if (id) return `<div class="aspect-video rounded-lg overflow-hidden border border-stone-200 mb-3 bg-stone-100"><iframe src="https://drive.google.com/file/d/${id}/preview" class="w-full h-full" allow="autoplay; encrypted-media" allowfullscreen title="${escapeHtml(alt)}"></iframe></div>`;
+    if (id) return drivePreview(id, alt);
     if (/\.(jpe?g|png|gif|webp|avif)(\?|$)/i.test(first)) return `<img src="${escapeHtml(first)}" alt="${escapeHtml(alt)}" class="w-full h-40 object-cover rounded-lg border border-stone-200 mb-3">`;
     return '';
   }
