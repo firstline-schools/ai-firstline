@@ -247,12 +247,17 @@
   // For Drive files, return a clickable thumbnail card that opens Drive in a new tab.
   // (Drive iframe embeds get blocked by third-party cookie restrictions on mobile Safari.)
   function drivePreview(id, alt) {
+    // Try Google user-content CDN first (lh3) then fall back to thumbnail API. Videos often
+    // only expose the poster frame via the thumbnail API; images work better via lh3.
+    const primary = `https://lh3.googleusercontent.com/d/${id}=w1200`;
+    const fallback = `https://drive.google.com/thumbnail?id=${id}&sz=w1200`;
+    const escaped = escapeHtml(alt || '');
     return `<a href="https://drive.google.com/file/d/${id}/view" target="_blank" rel="noopener" class="block relative aspect-video rounded-lg overflow-hidden border border-stone-200 mb-3 bg-stone-100 group">
-      <img src="https://drive.google.com/thumbnail?id=${id}&sz=w1000" alt="${escapeHtml(alt || '')}" class="w-full h-full object-cover" onerror="this.style.display='none'">
-      <div class="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/25 transition-colors">
+      <img src="${primary}" alt="${escaped}" class="w-full h-full object-cover" data-fb="${fallback}" onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.dataset.fb='';}else{this.style.display='none';}">
+      <div class="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/30 transition-colors">
         <div class="w-14 h-14 rounded-full bg-white/95 shadow-lg flex items-center justify-center text-2xl text-[#002f60]">▶</div>
       </div>
-      <div class="absolute bottom-2 right-2 text-[10px] font-semibold uppercase tracking-wider bg-white/90 text-stone-700 px-2 py-0.5 rounded">Open on Drive</div>
+      <div class="absolute bottom-2 right-2 text-[10px] font-semibold uppercase tracking-wider bg-white/90 text-stone-700 px-2 py-0.5 rounded">Open on Drive ↗</div>
     </a>`;
   }
 
