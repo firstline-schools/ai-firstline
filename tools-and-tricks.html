@@ -376,6 +376,15 @@
             return isNaN(parsed) ? 0 : parsed;
           };
           const isFeat = (r) => !!(r['Featured Date'] || '').trim();
+
+          // Assign stable tip numbers by ORIGINAL submission order (oldest = #001).
+          // Numbers stay put even when display order changes.
+          approved
+            .slice()
+            .sort((a, b) => tsValue(a.Timestamp) - tsValue(b.Timestamp))
+            .forEach((row, i) => { row.__num = i + 1; });
+
+          // Now sort for DISPLAY: featured first, then newest first.
           approved.sort((a, b) => {
             const af = isFeat(a), bf = isFeat(b);
             if (af && !bf) return -1;
@@ -386,7 +395,7 @@
           if (!approved.length) {
             container.innerHTML = '<div class="p-5 border border-dashed border-stone-300 rounded-lg text-sm text-stone-500 italic">No approved tips yet. The first one lands here after review.</div>';
           } else {
-            container.innerHTML = approved.map((row, i) => renderTip(row, i + 1)).join('');
+            container.innerHTML = approved.map(row => renderTip(row, row.__num)).join('');
           }
           document.getElementById('tipsCount').textContent = `${approved.length} approved ${approved.length === 1 ? 'tip' : 'tips'} · Refresh to see new submissions`;
           openAndScrollToHash();
