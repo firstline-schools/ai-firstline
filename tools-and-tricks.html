@@ -16,6 +16,9 @@
   summary { list-style: none; }
   details[open] > summary .chev { transform: rotate(90deg); }
   .chev { transition: transform 0.2s ease; display: inline-block; }
+  .tip-chip { border-color: #e7e5e4; color: #57534e; background: #ffffff; cursor: pointer; }
+  .tip-chip:hover { border-color: #002f60; color: #002f60; }
+  .tip-chip.active { background: #002f60; color: #ffffff; border-color: #002f60; }
 
 
   #site-nav.is-open { display: flex !important; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: #ffffff; padding: 1rem 1.5rem; box-shadow: 0 8px 24px rgba(0,0,0,0.08); z-index: 30; border-top: 1px solid #e7e5e4; gap: 0.25rem; }
@@ -137,6 +140,11 @@
               <a href="https://forms.gle/FrgKBrdodY2bLnMR6" target="_blank" rel="noopener" class="inline-block px-4 py-2 bg-[#e47727] hover:bg-[#c8651f] text-white font-semibold rounded-md text-sm">Share a tip →</a>
             </div>
           </div>
+
+          <div class="mb-4">
+            <input type="search" id="tipSearch" placeholder="Search tips — title, description, keywords…" class="w-full px-4 py-2 border border-stone-300 rounded-lg text-sm focus:outline-none focus:border-[#e47727] focus:ring-1 focus:ring-[#e47727]">
+          </div>
+          <div id="tipFilters" class="flex flex-wrap gap-2 mb-6"></div>
 
           <div id="tipsList" class="space-y-4">
             <div class="text-sm text-stone-500 italic p-5 border border-dashed border-stone-300 rounded-lg">Loading tips from the shared Sheet…</div>
@@ -357,10 +365,63 @@
               ${(link && !isVideo) ? `
                 <p class="text-sm text-stone-700 mb-3"><a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="text-[#002f60] hover:text-[#e47727] underline font-semibold break-all">${escapeHtml(link)} ↗</a></p>
               ` : ''}
+              ${(row['Community Quote'] || '').trim() ? `
+                <div class="mt-4 p-3 bg-orange-50 border-l-4 border-[#e47727] rounded-r">
+                  <div class="text-[10px] font-bold uppercase tracking-wider text-[#e47727] mb-1">Community says</div>
+                  <p class="text-sm text-stone-700 italic leading-relaxed">${escapeHtml(row['Community Quote'])}</p>
+                </div>
+              ` : ''}
+              <div class="mt-4 pt-3 border-t border-stone-100 text-right">
+                <a href="mailto:sshirey@firstlineschools.org?subject=${encodeURIComponent('Feedback on tip: ' + title)}&body=${encodeURIComponent('Tip: ' + title + '\n\nMy feedback / story / suggestion:\n\n')}" class="text-xs text-stone-500 hover:text-[#e47727]">💬 Suggest an update or share a story</a>
+              </div>
             </div>
           </details>
         </article>
       `;
+    }
+
+    let tipsState = { all: [], activeCat: 'all', query: '' };
+
+    function renderTipsList() {
+      const container = document.getElementById('tipsList');
+      const countEl = document.getElementById('tipsCount');
+      const q = tipsState.query.toLowerCase().trim();
+      const cat = tipsState.activeCat;
+
+      const filtered = tipsState.all.filter(row => {
+        const c = row['What kind of tip is this?'] || '';
+        if (cat !== 'all' && c !== cat) return false;
+        if (!q) return true;
+        const hay = [
+          row['Give it a title'] || '',
+          row['Tell us about it- Short description of purpose'] || '',
+          row['List steps- 1. 2. 3. '] || row['List steps- 1. 2. 3.'] || '',
+          row['Paste any code or prompt that would be helpful!'] || '',
+          c
+        ].join(' ').toLowerCase();
+        return hay.includes(q);
+      });
+
+      if (!filtered.length) {
+        container.innerHTML = '<div class="p-5 border border-dashed border-stone-300 rounded-lg text-sm text-stone-500 italic">No tips match. Try a different keyword or clear the filter.</div>';
+      } else {
+        container.innerHTML = filtered.map(row => renderTip(row, row.__num)).join('');
+      }
+      countEl.textContent = `Showing ${filtered.length} of ${tipsState.all.length} tip${tipsState.all.length === 1 ? '' : 's'}${q || cat !== 'all' ? ' (filtered)' : ''}`;
+    }
+
+    function renderTipFilters() {
+      const wrap = document.getElementById('tipFilters');
+      const cats = Array.from(new Set(tipsState.all.map(r => r['What kind of tip is this?']).filter(Boolean))).sort();
+      const chip = (val, label) => `<button type="button" data-cat="${escapeHtml(val)}" class="tip-chip px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full border ${tipsState.activeCat === val ? 'active' : ''}">${escapeHtml(label)}</button>`;
+      wrap.innerHTML = chip('all', 'All') + cats.map(c => chip(c, c)).join('');
+      wrap.querySelectorAll('.tip-chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+          tipsState.activeCat = btn.dataset.cat;
+          renderTipFilters();
+          renderTipsList();
+        });
+      });
     }
 
     function loadTips() {
@@ -377,27 +438,28 @@
           };
           const isFeat = (r) => !!(r['Featured Date'] || '').trim();
 
-          // Stable numbering: assign Tip # by chronological submission order (oldest = #001).
-          // Numbers never shift when new tips come in.
           approved
             .slice()
             .sort((a, b) => tsValue(a.Timestamp) - tsValue(b.Timestamp))
             .forEach((row, i) => { row.__num = i + 1; });
 
-          // Display order: featured first, then newest first.
           approved.sort((a, b) => {
             const af = isFeat(a), bf = isFeat(b);
             if (af && !bf) return -1;
             if (!af && bf) return 1;
             return tsValue(b.Timestamp) - tsValue(a.Timestamp);
           });
-          const container = document.getElementById('tipsList');
-          if (!approved.length) {
-            container.innerHTML = '<div class="p-5 border border-dashed border-stone-300 rounded-lg text-sm text-stone-500 italic">No approved tips yet. The first one lands here after review.</div>';
-          } else {
-            container.innerHTML = approved.map(row => renderTip(row, row.__num)).join('');
-          }
-          document.getElementById('tipsCount').textContent = `${approved.length} approved ${approved.length === 1 ? 'tip' : 'tips'} · Refresh to see new submissions`;
+
+          tipsState.all = approved;
+          renderTipFilters();
+          renderTipsList();
+
+          const searchEl = document.getElementById('tipSearch');
+          searchEl.addEventListener('input', (e) => {
+            tipsState.query = e.target.value;
+            renderTipsList();
+          });
+
           openAndScrollToHash();
         },
         error: function(err) {
