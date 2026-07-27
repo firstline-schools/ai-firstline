@@ -371,8 +371,12 @@
                   <p class="text-sm text-stone-700 italic leading-relaxed">${escapeHtml(row['Community Quote'])}</p>
                 </div>
               ` : ''}
-              <div class="mt-4 pt-3 border-t border-stone-100 text-right">
-                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=sshirey@firstlineschools.org&su=${encodeURIComponent('Feedback on tip: ' + title)}&body=${encodeURIComponent('Tip: ' + title + '\n\nMy feedback / story / suggestion:\n\n')}" target="_blank" rel="noopener" class="text-xs text-stone-500 hover:text-[#e47727]">💬 Suggest an update or share a story</a>
+              <div class="mt-4 pt-3 border-t border-stone-100">
+                <div class="text-[10px] font-bold uppercase tracking-wider text-stone-500 mb-2">💬 Suggest an update or share a story</div>
+                <textarea data-tip-title="${escapeHtml(title)}" class="feedback-input w-full text-sm border border-stone-200 rounded p-2 min-h-[60px] focus:outline-none focus:border-[#e47727]" placeholder="Your feedback, story, or update…"></textarea>
+                <div class="flex justify-end mt-2">
+                  <button type="button" class="feedback-send bg-[#002f60] hover:bg-[#001f40] text-white text-xs font-semibold px-3 py-1.5 rounded transition">Send</button>
+                </div>
               </div>
             </div>
           </details>
@@ -467,6 +471,46 @@
         }
       });
     }
+
+    // Feedback webhook — same Apps Script endpoint used to push tips.
+    // Feedback POSTs have type: 'feedback' and require no secret.
+    const FEEDBACK_WEBHOOK = 'https://script.google.com/macros/s/AKfycbxS6388LwbXXxbJMfFihDVsZLvVDoZAD_ECzo0mKTpCs3Mfppoie3xSAAkfv_80Eus0/exec';
+
+    document.addEventListener('click', async (e) => {
+      const btn = e.target.closest('.feedback-send');
+      if (!btn) return;
+      const wrap = btn.closest('.mt-4');
+      const textarea = wrap.querySelector('.feedback-input');
+      const text = textarea.value.trim();
+      if (!text) {
+        textarea.focus();
+        return;
+      }
+      const tipTitle = textarea.dataset.tipTitle || '';
+      const originalLabel = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      try {
+        // Apps Script Web App accepts POST with text/plain body (avoids CORS preflight).
+        await fetch(FEEDBACK_WEBHOOK, {
+          method: 'POST',
+          body: JSON.stringify({ type: 'feedback', tipTitle, feedback: text }),
+        });
+        btn.textContent = '✓ Thanks!';
+        btn.classList.remove('bg-[#002f60]', 'hover:bg-[#001f40]');
+        btn.classList.add('bg-emerald-600');
+        textarea.value = '';
+        setTimeout(() => {
+          btn.textContent = originalLabel;
+          btn.classList.remove('bg-emerald-600');
+          btn.classList.add('bg-[#002f60]', 'hover:bg-[#001f40]');
+          btn.disabled = false;
+        }, 3000);
+      } catch (err) {
+        btn.textContent = 'Error — try again';
+        btn.disabled = false;
+      }
+    });
 
     function copyCode(btn) {
       const code = btn.dataset.code;
