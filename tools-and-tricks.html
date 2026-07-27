@@ -319,8 +319,10 @@
       const stepsText = row['List steps- 1. 2. 3. '] || row['List steps- 1. 2. 3.'] || '';
       const steps = parseSteps(stepsText);
       const code = row['Paste any code or prompt that would be helpful!'] || '';
-      const link = row['Link (optional)'] || '';
+      const link = row['Link to the tool (optional)'] || row['Link (optional)'] || '';
+      const learnMore = (row['Tutorial or how-to link (optional)'] || '').trim();
       const isVideo = isVideoUrl(link);
+      const isYouTubeLM = /youtube\.com\/watch|youtu\.be\//.test(learnMore);
       const featured = !!(row['Featured Date'] || '').trim();
       const tsMs = Date.parse(row.Timestamp || '');
       const isNew = !isNaN(tsMs) && (Date.now() - tsMs) < 7 * 24 * 60 * 60 * 1000;
@@ -362,8 +364,11 @@
                   <button type="button" onclick="copyCode(this)" data-code="${escapeHtml(code)}" class="bg-[#002f60] hover:bg-[#001f40] text-white px-3 py-1 rounded transition text-xs shrink-0 whitespace-nowrap">Copy</button>
                 </div>
               ` : ''}
-              ${(link && !isVideo) ? `
-                <p class="text-sm text-stone-700 mb-3"><a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="text-[#002f60] hover:text-[#e47727] underline font-semibold break-all">${escapeHtml(link)} ↗</a></p>
+              ${(link && !isVideo) || learnMore ? `
+                <div class="flex flex-wrap gap-3 mb-3 text-sm">
+                  ${(link && !isVideo) ? `<a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 px-3 py-1.5 border border-[#002f60] text-[#002f60] hover:bg-[#002f60] hover:text-white rounded font-semibold transition">🔗 Open the tool ↗</a>` : ''}
+                  ${learnMore ? `<a href="${escapeHtml(learnMore)}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 px-3 py-1.5 border border-[#e47727] text-[#e47727] hover:bg-[#e47727] hover:text-white rounded font-semibold transition">${isYouTubeLM ? '📺 Watch tutorial' : '📖 Learn more'} →</a>` : ''}
+                </div>
               ` : ''}
               ${(row['Community Quote'] || '').trim() ? `
                 <div class="mt-4 p-3 bg-orange-50 border-l-4 border-[#e47727] rounded-r">
@@ -401,6 +406,7 @@
           row['Tell us about it- Short description of purpose'] || '',
           row['List steps- 1. 2. 3. '] || row['List steps- 1. 2. 3.'] || '',
           row['Paste any code or prompt that would be helpful!'] || '',
+          row['Community Quote'] || '',
           c
         ].join(' ').toLowerCase();
         return hay.includes(q);
