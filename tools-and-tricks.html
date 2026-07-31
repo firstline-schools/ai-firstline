@@ -338,6 +338,11 @@
       const featured = !!(row['Featured Date'] || '').trim();
       const tsMs = Date.parse(row.Timestamp || '');
       const isNew = !isNaN(tsMs) && (Date.now() - tsMs) < 7 * 24 * 60 * 60 * 1000;
+      const newsletterSent = (row['Newsletter Sent Date'] || '').trim();
+      const newsletterSentMs = Date.parse(newsletterSent || '');
+      const newsletterBadge = !isNaN(newsletterSentMs)
+        ? `🏆 Tip of the Week · ${new Date(newsletterSentMs).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+        : '';
 
       return `
         <article id="${id}" class="tip border ${featured ? 'border-[#e47727]' : 'border-stone-200'} rounded-lg overflow-hidden transition-colors">
@@ -347,6 +352,7 @@
                 <div class="flex items-center gap-2 flex-wrap mb-1">
                   <span class="text-[10px] font-bold uppercase tracking-wider ${catClass} px-2 py-0.5 rounded">${escapeHtml(category)}</span>
                   <span class="text-[10px] font-bold uppercase tracking-wider text-stone-500">Tip #${String(num).padStart(3, '0')}</span>
+                  ${newsletterBadge ? `<span class="text-[10px] font-bold uppercase tracking-wider bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">${escapeHtml(newsletterBadge)}</span>` : ''}
                   ${isNew ? '<span class="text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded">★ New</span>' : ''}
                   ${featured ? '<span class="text-[10px] font-bold uppercase tracking-wider bg-orange-100 text-[#e47727] px-2 py-0.5 rounded">Featured</span>' : ''}
                 </div>
