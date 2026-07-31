@@ -338,7 +338,7 @@
       const featured = !!(row['Featured Date'] || '').trim();
       const tsMs = Date.parse(row.Timestamp || '');
       const isNew = !isNaN(tsMs) && (Date.now() - tsMs) < 7 * 24 * 60 * 60 * 1000;
-      const newsletterSent = (row['Newsletter Sent Date'] || '').trim();
+      const newsletterSent = (row['Newsletter Date'] || row['Newsletter Sent Date'] || '').trim();
       const newsletterSentMs = Date.parse(newsletterSent || '');
       const newsletterBadge = !isNaN(newsletterSentMs)
         ? `🏆 Tip of the Week · ${new Date(newsletterSentMs).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
