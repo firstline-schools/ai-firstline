@@ -326,6 +326,13 @@
       const code = row['Paste any code or prompt that would be helpful!'] || '';
       const link = row['Link to the tool (optional)'] || row['Link (optional)'] || '';
       const learnMore = (row['Tutorial or how-to link (optional)'] || '').trim();
+      const rawName = (row['Your first (preferred) and last name.'] || '').trim();
+      const school = (row['Your school / site'] || '').trim();
+      // Only treat as a real name if it's not the legacy Yes/No consent value.
+      const contributor = /^(yes|no)$/i.test(rawName) ? '' : rawName;
+      const attribution = contributor
+        ? (school ? `${contributor} · ${school}` : contributor)
+        : '';
       const isVideo = isVideoUrl(link);
       const isYouTubeLM = /youtube\.com\/watch|youtu\.be\//.test(learnMore);
       const featured = !!(row['Featured Date'] || '').trim();
@@ -352,6 +359,7 @@
             </summary>
             <div class="px-4 pb-4 pt-2 border-t border-stone-100">
               <p class="tip-desc text-sm text-stone-700 leading-relaxed mb-3">${escapeHtml(description)}</p>
+              ${attribution ? `<p class="text-xs text-stone-500 italic mb-3">Contributed by ${escapeHtml(attribution)}</p>` : ''}
               ${isVideo ? `
                 <div class="aspect-video max-w-2xl rounded-lg overflow-hidden border border-stone-200 mb-4 bg-stone-100">
                   <iframe src="${videoEmbedUrl(link)}" class="w-full h-full" allow="autoplay; encrypted-media" allowfullscreen title="${escapeHtml(title)}"></iframe>
