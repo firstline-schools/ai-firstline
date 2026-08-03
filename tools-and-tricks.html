@@ -397,6 +397,7 @@
               ` : ''}
               <div class="mt-4 pt-3 border-t border-stone-100">
                 <div class="text-[10px] font-bold uppercase tracking-wider text-stone-500 mb-2">💬 Suggest an update or share a story</div>
+                <input type="text" class="feedback-name w-full text-sm border border-stone-200 rounded p-2 mb-2 focus:outline-none focus:border-[#e47727]" placeholder="Your name (optional)">
                 <textarea data-tip-title="${escapeHtml(title)}" class="feedback-input w-full text-sm border border-stone-200 rounded p-2 min-h-[60px] focus:outline-none focus:border-[#e47727]" placeholder="Your feedback, story, or update…"></textarea>
                 <div class="flex justify-end mt-2">
                   <button type="button" class="feedback-send bg-[#002f60] hover:bg-[#001f40] text-white text-xs font-semibold px-3 py-1.5 rounded transition">Send</button>
@@ -506,11 +507,13 @@
       if (!btn) return;
       const wrap = btn.closest('.mt-4');
       const textarea = wrap.querySelector('.feedback-input');
+      const nameInput = wrap.querySelector('.feedback-name');
       const text = textarea.value.trim();
       if (!text) {
         textarea.focus();
         return;
       }
+      const submitterName = nameInput ? nameInput.value.trim() : '';
       const tipTitle = textarea.dataset.tipTitle || '';
       const originalLabel = btn.textContent;
       btn.disabled = true;
@@ -519,12 +522,13 @@
         // Apps Script Web App accepts POST with text/plain body (avoids CORS preflight).
         await fetch(FEEDBACK_WEBHOOK, {
           method: 'POST',
-          body: JSON.stringify({ type: 'feedback', tipTitle, feedback: text }),
+          body: JSON.stringify({ type: 'feedback', tipTitle, feedback: text, submitterName }),
         });
         btn.textContent = '✓ Thanks!';
         btn.classList.remove('bg-[#002f60]', 'hover:bg-[#001f40]');
         btn.classList.add('bg-emerald-600');
         textarea.value = '';
+        if (nameInput) nameInput.value = '';
         setTimeout(() => {
           btn.textContent = originalLabel;
           btn.classList.remove('bg-emerald-600');
