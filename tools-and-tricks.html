@@ -338,6 +338,9 @@
       const featured = !!(row['Featured Date'] || '').trim();
       const tsMs = Date.parse(row.Timestamp || '');
       const isNew = !isNaN(tsMs) && (Date.now() - tsMs) < 7 * 24 * 60 * 60 * 1000;
+      // Tools officially approved by FLS. Everything else gets a "Third-party" badge for transparency.
+      const APPROVED = ['Gmail','Docs','Sheets','Slides','Meet','Vids','Forms','Gemini','Gemini Notebook','AI Prompt','Coursemojo','PlayLab'];
+      const isThirdParty = category && !APPROVED.some(a => a.toLowerCase() === category.toLowerCase());
       const newsletterSent = (row['Newsletter Date'] || row['Newsletter Sent Date'] || '').trim();
       const newsletterSentMs = Date.parse(newsletterSent || '');
       const newsletterBadge = !isNaN(newsletterSentMs)
@@ -355,6 +358,7 @@
                   ${newsletterBadge ? `<span class="text-[10px] font-bold uppercase tracking-wider bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">${escapeHtml(newsletterBadge)}</span>` : ''}
                   ${isNew ? '<span class="text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded">★ New</span>' : ''}
                   ${featured ? '<span class="text-[10px] font-bold uppercase tracking-wider bg-orange-100 text-[#e47727] px-2 py-0.5 rounded">Featured</span>' : ''}
+                  ${isThirdParty ? '<span class="text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-900 px-2 py-0.5 rounded" title="Not on the FLS approved tools list — for awareness only">⚠ Third-party</span>' : ''}
                 </div>
                 <h3 class="text-base font-bold text-[#002f60]">${escapeHtml(title)}</h3>
               </div>
