@@ -65,8 +65,8 @@
       <nav aria-label="Category navigation">
         <div class="text-[10px] font-bold uppercase tracking-widest text-stone-500 mb-3">Categories</div>
         <ul class="space-y-0.5 border-l border-stone-200">
-          <li><a href="#google" class="block pl-3 py-1.5 text-sm text-stone-700 hover:text-[#e47727] hover:border-l-2 hover:border-[#e47727] hover:-ml-px">🇬 Google Resources</a></li>
           <li><a href="#fls-tips" class="block pl-3 py-1.5 text-sm text-stone-700 hover:text-[#e47727] hover:border-l-2 hover:border-[#e47727] hover:-ml-px">✨ FirstLine Educator Tips</a></li>
+          <li><a href="#google" class="block pl-3 py-1.5 text-sm text-stone-700 hover:text-[#e47727] hover:border-l-2 hover:border-[#e47727] hover:-ml-px">🇬 Google Resources</a></li>
           <li><a href="#coursemojo" class="block pl-3 py-1.5 text-sm text-stone-700 hover:text-[#e47727] hover:border-l-2 hover:border-[#e47727] hover:-ml-px">📚 Coursemojo Resources</a></li>
           <li><a href="#playlab" class="block pl-3 py-1.5 text-sm text-stone-700 hover:text-[#e47727] hover:border-l-2 hover:border-[#e47727] hover:-ml-px">🎨 PlayLab Resources</a></li>
           <li><a href="#ai-for-equity" class="block pl-3 py-1.5 text-sm text-stone-700 hover:text-[#e47727] hover:border-l-2 hover:border-[#e47727] hover:-ml-px">🤝 AI for Equity</a></li>
@@ -91,6 +91,35 @@
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#002f60] mb-4 leading-tight">Tools & Tricks</h1>
         <p class="text-base sm:text-lg text-stone-700 leading-relaxed mb-3">A directory, not a duplicate. We point to the best resources from the tools FirstLine uses — Google, Coursemojo, PlayLab — plus tips from our own educators.</p>
         <p class="text-sm text-stone-600 leading-relaxed">Categories grow as we approve more tools. Have a trick to share? <a href="https://forms.gle/FrgKBrdodY2bLnMR6" target="_blank" rel="noopener" class="text-[#002f60] hover:text-[#e47727] underline font-semibold">Send it through the form</a>.</p>
+
+        <hr class="border-stone-200 my-10">
+
+        <section id="fls-tips" class="mb-14">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-2xl" aria-hidden="true">✨</span>
+            <h2 class="text-2xl font-extrabold text-[#002f60]">FirstLine Educator Tips</h2>
+          </div>
+          <p class="text-stone-600 text-sm mb-4">Tips shared by FirstLine educators. Each has a permalink so you can share it directly with a teammate.</p>
+          <div class="mb-8 p-4 bg-orange-50 border-l-4 border-[#e47727] rounded">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <div class="text-sm font-bold text-stone-900">Got a tip? Send it in.</div>
+                <div class="text-xs text-stone-600">Two minutes to submit. It appears here after Scott reviews.</div>
+              </div>
+              <a href="https://forms.gle/FrgKBrdodY2bLnMR6" target="_blank" rel="noopener" class="inline-block px-4 py-2 bg-[#e47727] hover:bg-[#c8651f] text-white font-semibold rounded-md text-sm">Share a tip →</a>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <input type="search" id="tipSearch" placeholder="Search tips — title, description, keywords…" class="w-full px-4 py-2 border border-stone-300 rounded-lg text-sm focus:outline-none focus:border-[#e47727] focus:ring-1 focus:ring-[#e47727]">
+          </div>
+          <div id="tipFilters" class="flex flex-wrap gap-2 mb-6"></div>
+
+          <div id="tipsList" class="space-y-4">
+            <div class="text-sm text-stone-500 italic p-5 border border-dashed border-stone-300 rounded-lg">Loading tips from the shared Sheet…</div>
+          </div>
+          <div id="tipsCount" class="text-xs text-stone-500 italic mt-6 text-center"></div>
+        </section>
 
         <hr class="border-stone-200 my-10">
 
@@ -130,35 +159,6 @@
         <hr class="border-stone-200 my-10">
 
         <!-- FIRSTLINE EDUCATOR TIPS (Sheet-fed) -->
-        <section id="fls-tips" class="mb-14">
-          <div class="flex items-center gap-2 mb-2">
-            <span class="text-2xl" aria-hidden="true">✨</span>
-            <h2 class="text-2xl font-extrabold text-[#002f60]">FirstLine Educator Tips</h2>
-          </div>
-          <p class="text-stone-600 text-sm mb-4">Tips shared by FirstLine educators. Each has a permalink so you can share it directly with a teammate.</p>
-          <div class="mb-8 p-4 bg-orange-50 border-l-4 border-[#e47727] rounded">
-            <div class="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <div class="text-sm font-bold text-stone-900">Got a tip? Send it in.</div>
-                <div class="text-xs text-stone-600">Two minutes to submit. It appears here after Scott reviews.</div>
-              </div>
-              <a href="https://forms.gle/FrgKBrdodY2bLnMR6" target="_blank" rel="noopener" class="inline-block px-4 py-2 bg-[#e47727] hover:bg-[#c8651f] text-white font-semibold rounded-md text-sm">Share a tip →</a>
-            </div>
-          </div>
-
-          <div class="mb-4">
-            <input type="search" id="tipSearch" placeholder="Search tips — title, description, keywords…" class="w-full px-4 py-2 border border-stone-300 rounded-lg text-sm focus:outline-none focus:border-[#e47727] focus:ring-1 focus:ring-[#e47727]">
-          </div>
-          <div id="tipFilters" class="flex flex-wrap gap-2 mb-6"></div>
-
-          <div id="tipsList" class="space-y-4">
-            <div class="text-sm text-stone-500 italic p-5 border border-dashed border-stone-300 rounded-lg">Loading tips from the shared Sheet…</div>
-          </div>
-          <div id="tipsCount" class="text-xs text-stone-500 italic mt-6 text-center"></div>
-        </section>
-
-        <hr class="border-stone-200 my-10">
-
         <!-- COURSEMOJO -->
         <section id="coursemojo" class="mb-14">
           <div class="flex items-center gap-2 mb-2">
