@@ -475,6 +475,7 @@
     const story = (row[BRIGHT_FIELDS.story] || '').trim();
     const impact = (row[BRIGHT_FIELDS.impact] || '').trim();
     const upload = (row[BRIGHT_FIELDS.upload] || '').trim();
+    const submittedBy = (row['Submitted by'] || '').trim();
     const ts = parseTimestamp(row.Timestamp);
     const blurbTitle = (row['Blurb Title'] || '').trim();
     const blurbBody = (row['Blurb Body'] || '').trim();
@@ -496,6 +497,7 @@
             ? `<p class="text-sm text-stone-700 leading-relaxed mb-3">${escapeHtml(blurbBody)}</p>`
             : `${story ? `<p class="text-sm text-stone-700 leading-relaxed mb-3">${escapeHtml(story)}</p>` : ''}`}
           ${impact && !blurbBody ? `<div class="text-xs text-stone-800 leading-relaxed border-l-2 border-[#e47727] pl-3 py-1"><span class="font-bold uppercase tracking-wider text-[10px] text-[#e47727]">Why it mattered</span><br>${escapeHtml(impact)}</div>` : ''}
+          ${submittedBy ? `<p class="text-xs text-stone-500 italic mt-3">Submitted by ${escapeHtml(submittedBy)}</p>` : ''}
         </div>
       </article>`;
   }
