@@ -574,5 +574,21 @@
     });
   });
 </script>
+<script>
+// If page is served via Google Translate proxy (.translate.goog),
+// intercept clicks on Google Docs links and open them direct so
+// Docs does not error trying to load inside the proxy.
+if (location.hostname.endsWith('.translate.goog')) {
+  document.addEventListener('click', function(e) {
+    var a = e.target.closest ? e.target.closest('a') : null;
+    if (!a || !a.href) return;
+    var m = a.href.match(/\/document\/d\/([a-zA-Z0-9_-]+)/);
+    if (m) {
+      e.preventDefault();
+      window.open('https://docs.google.com/document/d/' + m[1] + '/view', '_blank', 'noopener');
+    }
+  }, true);
+}
+</script>
 </body>
 </html>
