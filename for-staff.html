@@ -295,13 +295,18 @@
 
   // Drive files: thumbnail + click-out (iframe embeds get blocked by third-party cookie restrictions).
   function drivePreview(id, alt) {
-    // Drive's thumbnail endpoint handles PDFs (page 1), images, and video frames.
-    // lh3 is the fallback for edge cases where thumbnail is slow to warm up.
+    // Drive's thumbnail endpoint handles PDFs, images, and video frames; lh3 is fallback.
+    // Some file types (PDFs exported from Docs, etc.) return an empty placeholder image
+    // that doesn't trigger onerror — detect via naturalWidth and swap to a document-icon card.
     const primary = `https://drive.google.com/thumbnail?id=${id}&sz=w1200`;
     const fallback = `https://lh3.googleusercontent.com/d/${id}=w1200`;
     const escaped = escHtml(alt || '');
     return `<a href="https://drive.google.com/file/d/${id}/view" target="_blank" rel="noopener" class="block relative aspect-video rounded-lg overflow-hidden border border-stone-200 mb-3 bg-stone-100 group">
-      <img src="${primary}" alt="${escaped}" class="w-full h-full object-cover" data-fb="${fallback}" onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.dataset.fb='';}else{this.style.display='none';}">
+      <div class="absolute inset-0 flex flex-col items-center justify-center text-stone-400 pointer-events-none">
+        <div class="text-5xl mb-1">📄</div>
+        <div class="text-xs font-semibold uppercase tracking-wider">Attachment</div>
+      </div>
+      <img src="${primary}" alt="${escaped}" class="relative w-full h-full object-cover" data-fb="${fallback}" onload="if(this.naturalWidth<100){if(this.dataset.fb){this.src=this.dataset.fb;this.dataset.fb='';}else{this.style.display='none';}}" onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.dataset.fb='';}else{this.style.display='none';}">
       <div class="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors"></div>
       <div class="absolute bottom-2 right-2 text-[10px] font-semibold uppercase tracking-wider bg-white/90 text-stone-700 px-2 py-0.5 rounded shadow-sm">Open on Drive ↗</div>
     </a>`;
