@@ -366,7 +366,8 @@
   }
 
   let brightAll = [];
-  let brightShowing = INITIAL_BRIGHT_SHOWN;
+  const BRIGHT_RETENTION_DAYS = 30;
+  const DAY_MS = 86400000;
 
   function renderBright() {
     const container = document.getElementById('brightSpotsList');
@@ -374,8 +375,19 @@
       container.innerHTML = '<div class="p-5 border border-dashed border-stone-300 rounded-lg text-sm text-stone-500 italic col-span-full bg-white">The first bright spot lands here after review. Send a celebration to start the list.</div>';
       return;
     }
-    const visible = brightAll.slice(0, brightShowing);
-    container.innerHTML = visible.map(brightTile).join('');
+    // Teaser: only Featured or items within the retention window; cap at INITIAL_BRIGHT_SHOWN.
+    const now = Date.now();
+    const visible = brightAll
+      .filter(r => {
+        const isFeatured = !!((r['Featured'] || r['Featured Date'] || '').trim());
+        if (isFeatured) return true;
+        const ts = tsMs(r.Timestamp);
+        return ts && (now - ts) <= BRIGHT_RETENTION_DAYS * DAY_MS;
+      })
+      .slice(0, INITIAL_BRIGHT_SHOWN);
+    container.innerHTML = visible.length
+      ? visible.map(brightTile).join('')
+      : '<div class="p-5 border border-dashed border-stone-300 rounded-lg text-sm text-stone-500 italic col-span-full bg-white">No recent bright spots. See the archive on the News page.</div>';
   }
 
   function loadBrightSpots() {

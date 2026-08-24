@@ -112,6 +112,9 @@
           <div class="grid sm:grid-cols-2 gap-4" id="internalList">
             <div class="p-5 border border-dashed border-stone-300 rounded-lg text-sm text-stone-500 italic">Internal announcements will appear here as they're added.</div>
           </div>
+          <div class="text-center mt-6" id="internalShowOlderWrap" style="display:none;">
+            <button id="internalShowOlderBtn" class="text-sm font-semibold text-[#002f60] hover:text-[#e47727] underline">Show older FLS updates →</button>
+          </div>
         </section>
 
         <hr class="border-stone-200 my-10">
@@ -128,9 +131,10 @@
           <div class="grid sm:grid-cols-2 gap-4" id="brightSpotsList">
             <div class="p-5 border border-dashed border-stone-300 rounded-lg text-sm text-stone-500 italic col-span-full bg-white">Loading bright spots…</div>
           </div>
-          <div class="text-center mt-6" id="brightShowMoreWrap" style="display:none;">
-            <button id="brightShowMoreBtn" class="text-sm font-semibold text-[#002f60] hover:text-[#e47727] underline">Show more bright spots →</button>
-          </div>
+          <details class="mt-6 group" id="brightArchiveWrap" style="display:none;">
+            <summary class="cursor-pointer text-sm font-semibold text-[#002f60] hover:text-[#e47727]"><span id="brightArchiveLabel">Older bright spots</span> ▾</summary>
+            <ul class="mt-3 border-t border-stone-200 divide-y divide-stone-100" id="brightArchiveList"></ul>
+          </details>
         </section>
 
         <hr class="border-stone-200 my-10">
@@ -329,17 +333,29 @@
       </article>`;
   }
 
-  let state = { internal: [], featured: [], recent: [], older: [], showingOlder: false, activeCat: 'all' };
+  let state = { internalFeatured: [], internalRecent: [], internalOlder: [], featured: [], recent: [], older: [], showingOlder: false, showingInternalOlder: false, activeCat: 'all' };
 
   function render() {
     const catFilter = state.activeCat;
     const passes = r => catFilter === 'all' || (r.Category || '').toLowerCase() === catFilter.toLowerCase();
 
-    // Internal
-    const internal = state.internal.filter(passes);
-    document.getElementById('internalList').innerHTML = internal.length
-      ? internal.map(tileInternal).join('')
+    // Internal — pinned Featured on top, then recent, older behind toggle
+    const internalFeatured = state.internalFeatured.filter(passes);
+    const internalRecent = state.internalRecent.filter(passes);
+    const internalOlder = state.internalOlder.filter(passes);
+    const internalVisible = internalFeatured.concat(internalRecent).concat(state.showingInternalOlder ? internalOlder : []);
+    document.getElementById('internalList').innerHTML = internalVisible.length
+      ? internalVisible.map(tileInternal).join('')
       : '<div class="p-5 border border-dashed border-stone-300 rounded-lg text-sm text-stone-500 italic col-span-full">No FLS updates in this category yet.</div>';
+
+    const iWrap = document.getElementById('internalShowOlderWrap');
+    const iBtn = document.getElementById('internalShowOlderBtn');
+    if (internalOlder.length && !state.showingInternalOlder) {
+      iWrap.style.display = '';
+      iBtn.textContent = `Show ${internalOlder.length} older FLS update${internalOlder.length === 1 ? '' : 's'} →`;
+    } else {
+      iWrap.style.display = 'none';
+    }
 
     // Featured external
     const featured = state.featured.filter(passes);
@@ -376,7 +392,9 @@
         // Sort by timestamp desc
         rows.sort((a, b) => parseTimestamp(b.Timestamp) - parseTimestamp(a.Timestamp));
 
-        const internal = [];
+        const internalFeatured = [];
+        const internalRecent = [];
+        const internalOlder = [];
         const featured = [];
         const recent = [];
         const older = [];
@@ -390,7 +408,10 @@
           if (type === 'bright spot') return;
 
           if (type === 'internal') {
-            internal.push(r);
+            if (isFeatured) internalFeatured.push(r);
+            else if (age <= DEFAULT_RETENTION_DAYS) internalRecent.push(r);
+            else if (age <= 90) internalOlder.push(r);
+            // > 90 days without Featured are dropped from the site (still in Sheet)
           } else {
             if (isFeatured) {
               featured.push(r);
@@ -403,7 +424,9 @@
           }
         });
 
-        state.internal = internal;
+        state.internalFeatured = internalFeatured;
+        state.internalRecent = internalRecent;
+        state.internalOlder = internalOlder;
         state.featured = featured;
         state.recent = recent;
         state.older = older;
@@ -428,6 +451,7 @@
         chip.classList.add('active');
         state.activeCat = chip.dataset.cat;
         state.showingOlder = false;
+        state.showingInternalOlder = false;
         render();
       });
     });
@@ -438,6 +462,11 @@
       render();
     });
 
+    document.getElementById('internalShowOlderBtn').addEventListener('click', () => {
+      state.showingInternalOlder = true;
+      render();
+    });
+
     loadNews();
   });
 </script>
@@ -445,7 +474,6 @@
 <script>
   // Bright Spots (from Celebrate a Teammate form response Sheet)
   const BRIGHT_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTopaRD_75aPs1DunMAljmPbItpPgdXmB81cJpL2mq-u1LVHaDVgkxoFP8xgNtI0ZUq4NSEb9-SGG__/pub?output=csv';
-  const INITIAL_BRIGHT_SHOWN = 6;
   const BRIGHT_FIELDS = {
     teammate: 'Who are you celebrating? (First and Last Name)',
     role:     'Their role (e.g. 5th ELA Teacher, K-2 Paraprofessional)',
@@ -509,25 +537,38 @@
       </article>`;
   }
 
-  let brightAll = [];
-  let brightShowing = INITIAL_BRIGHT_SHOWN;
+  let brightMain = [];
+  let brightArchive = [];
+  const BRIGHT_RETENTION_DAYS = 30;
+
+  function brightArchiveRow(row) {
+    const teammate = (row[BRIGHT_FIELDS.teammate] || '').trim() || 'A FirstLine teammate';
+    const blurbTitle = (row['Blurb Title'] || '').trim();
+    const headline = blurbTitle || teammate;
+    const submittedBy = (row['Submitted by'] || '').trim();
+    const ts = parseTimestamp(row.Timestamp);
+    const meta = [fmtDate(ts), submittedBy ? `submitted by ${submittedBy}` : ''].filter(Boolean).join(' · ');
+    return `<li class="py-2 flex flex-wrap items-baseline gap-x-3"><span class="text-sm font-semibold text-[#002f60]">${escapeHtml(headline)}</span><span class="text-xs text-stone-500">${escapeHtml(meta)}</span></li>`;
+  }
 
   function renderBright() {
     const container = document.getElementById('brightSpotsList');
-    if (!brightAll.length) {
+    if (!brightMain.length && !brightArchive.length) {
       container.innerHTML = '<div class="p-5 border border-dashed border-stone-300 rounded-lg text-sm text-stone-500 italic col-span-full bg-white">The first bright spot lands here after review.</div>';
-      document.getElementById('brightShowMoreWrap').style.display = 'none';
+      document.getElementById('brightArchiveWrap').style.display = 'none';
       return;
     }
-    const visible = brightAll.slice(0, brightShowing);
-    container.innerHTML = visible.map(brightTile).join('');
-    const wrap = document.getElementById('brightShowMoreWrap');
-    const btn = document.getElementById('brightShowMoreBtn');
-    if (brightAll.length > brightShowing) {
-      wrap.style.display = '';
-      btn.textContent = `Show ${brightAll.length - brightShowing} more →`;
+    container.innerHTML = brightMain.length
+      ? brightMain.map(brightTile).join('')
+      : '<div class="p-5 border border-dashed border-stone-300 rounded-lg text-sm text-stone-500 italic col-span-full bg-white">No recent bright spots — check the archive below.</div>';
+
+    const arWrap = document.getElementById('brightArchiveWrap');
+    if (brightArchive.length) {
+      arWrap.style.display = '';
+      document.getElementById('brightArchiveLabel').textContent = `Older bright spots (${brightArchive.length})`;
+      document.getElementById('brightArchiveList').innerHTML = brightArchive.map(brightArchiveRow).join('');
     } else {
-      wrap.style.display = 'none';
+      arWrap.style.display = 'none';
     }
   }
 
@@ -545,7 +586,16 @@
           if (!aFeat && bFeat) return 1;
           return parseTimestamp(b.Timestamp) - parseTimestamp(a.Timestamp);
         });
-        brightAll = rows;
+        const main = [];
+        const archive = [];
+        rows.forEach(r => {
+          const isFeatured = !!((r['Featured'] || r['Featured Date'] || '').trim());
+          const age = daysSince(parseTimestamp(r.Timestamp));
+          if (isFeatured || age <= BRIGHT_RETENTION_DAYS) main.push(r);
+          else archive.push(r);
+        });
+        brightMain = main;
+        brightArchive = archive;
         renderBright();
       },
       error: function() {
@@ -555,10 +605,6 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('brightShowMoreBtn').addEventListener('click', () => {
-      brightShowing += INITIAL_BRIGHT_SHOWN;
-      renderBright();
-    });
     loadBrightSpots();
   });
 </script>
