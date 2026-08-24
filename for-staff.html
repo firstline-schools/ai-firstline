@@ -340,7 +340,7 @@
     // Optional editor-provided overrides
     const blurbTitle = (row['Blurb Title'] || '').trim();
     const blurbBody = (row['Blurb Body'] || '').trim();
-    const isFeatured = !!(((row['Featured'] || row['Featured Date']) || '').trim());
+    const isFeatured = /^yes$/i.test((row['Featured'] || '').trim()) || !!(row['Featured Date'] || '').trim();
 
     const headline = blurbTitle || teammate;
     const roleLocation = [role, location].filter(Boolean).join(' · ');
@@ -379,7 +379,7 @@
     const now = Date.now();
     const visible = brightAll
       .filter(r => {
-        const isFeatured = !!((r['Featured'] || r['Featured Date'] || '').trim());
+        const isFeatured = /^yes$/i.test((r['Featured'] || '').trim()) || !!(r['Featured Date'] || '').trim();
         if (isFeatured) return true;
         const ts = tsMs(r.Timestamp);
         return ts && (now - ts) <= BRIGHT_RETENTION_DAYS * DAY_MS;
