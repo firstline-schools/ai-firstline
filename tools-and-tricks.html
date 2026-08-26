@@ -160,6 +160,8 @@
               <p class="text-sm text-stone-600 mt-1">Google's help catch-all — searchable articles across every Workspace app, Gemini, Vids, and beyond. Where to go if the curated resources above don't cover your question.</p>
             </li>
           </ul>
+          <div id="tips-google" class="mt-8"></div>
+
           <p class="text-xs text-stone-500 italic mt-4">More resources added as we verify them. Have a Google resource that works well for FLS teachers? <a href="https://forms.gle/FrgKBrdodY2bLnMR6" target="_blank" rel="noopener" class="text-[#002f60] hover:text-[#e47727] underline font-semibold">Send it in →</a></p>
         </section>
 
@@ -184,6 +186,8 @@
               <p class="text-sm text-stone-600 mt-1">FirstLine-specific setup notes and use cases on the Staff Portal. FLS Workspace sign-in required.</p>
             </li>
           </ul>
+
+          <div id="tips-claude" class="mt-8"></div>
 
           <p class="text-xs text-stone-500 italic mt-6">Have a Claude tip that worked for your class or planning? <a href="https://forms.gle/FrgKBrdodY2bLnMR6" target="_blank" rel="noopener" class="text-[#002f60] hover:text-[#e47727] underline font-semibold">Send it in →</a></p>
         </section>
@@ -210,6 +214,8 @@
             </li>
           </ul>
 
+          <div id="tips-chatgpt" class="mt-8"></div>
+
           <p class="text-xs text-stone-500 italic mt-6">Have a ChatGPT tip that worked for your class or planning? <a href="https://forms.gle/FrgKBrdodY2bLnMR6" target="_blank" rel="noopener" class="text-[#002f60] hover:text-[#e47727] underline font-semibold">Send it in →</a></p>
         </section>
 
@@ -234,6 +240,8 @@
             </li>
           </ul>
 
+          <div id="tips-coursemojo" class="mt-8"></div>
+
           <p class="text-xs text-stone-500 italic mt-6">Have a Coursemojo tip that worked for your class? <a href="https://forms.gle/FrgKBrdodY2bLnMR6" target="_blank" rel="noopener" class="text-[#002f60] hover:text-[#e47727] underline font-semibold">Send it in →</a></p>
         </section>
 
@@ -257,6 +265,8 @@
               <p class="text-sm text-stone-600 mt-1">Educator resources, community, and getting-started guides. Watch this space for FirstLine-specific rollout details this fall.</p>
             </li>
           </ul>
+
+          <div id="tips-playlab" class="mt-8"></div>
 
           <p class="text-xs text-stone-500 italic mt-6">FirstLine PlayLab rollout details coming with the fall 2026 launch. Questions about early access? <a href="mailto:sshirey@firstlineschools.org" class="text-[#002f60] hover:text-[#e47727] underline font-semibold">Scott Shirey, CIO</a>.</p>
         </section>
@@ -514,6 +524,60 @@
       });
     }
 
+    // Tool -> categories mapping. Google Workspace aggregates its sub-products.
+    const TOOL_FAMILIES = [
+      { id: 'tips-google',    label: 'Google Workspace',    categories: ['Gmail','Docs','Sheets','Slides','Meet','Vids','Forms','Gemini','Gemini Notebook','AI Prompt'] },
+      { id: 'tips-claude',    label: 'Claude for Teachers', categories: ['Claude for Teachers'] },
+      { id: 'tips-chatgpt',   label: 'ChatGPT for Teachers',categories: ['ChatGPT for Teachers'] },
+      { id: 'tips-coursemojo',label: 'Coursemojo',          categories: ['Coursemojo'] },
+      { id: 'tips-playlab',   label: 'PlayLab',             categories: ['PlayLab'] },
+    ];
+
+    function toolTipCompact(row) {
+      const num = row.__num;
+      const id = `tip-${String(num).padStart(3, '0')}`;
+      const category = row['What kind of tip is this?'] || 'Other';
+      const title = row['Give it a title'] || '(no title)';
+      const desc = row['Tell us about it- Short description of purpose'] || '';
+      const rawName = (row['Your first (preferred) and last name.'] || '').trim();
+      const contributor = /^(yes|no)$/i.test(rawName) ? '' : rawName;
+      const school = (row['Your school / site'] || '').trim();
+      const attribution = contributor ? (school ? `${contributor} · ${school}` : contributor) : '';
+      return `<article class="border border-stone-200 rounded-lg p-4 hover:shadow-sm transition-shadow bg-white">
+        <div class="flex items-baseline gap-2 mb-1 text-[10px] font-bold uppercase tracking-wider flex-wrap">
+          <span class="px-2 py-0.5 rounded bg-stone-100 text-stone-700">${escapeHtml(category)}</span>
+          <span class="text-stone-500">Tip #${String(num).padStart(3,'0')}</span>
+        </div>
+        <a href="#${id}" class="text-base font-bold text-[#002f60] hover:text-[#e47727] leading-snug">${escapeHtml(title)}</a>
+        ${desc ? `<p class="text-sm text-stone-700 leading-relaxed mt-1 mb-2">${escapeHtml(desc)}</p>` : ''}
+        ${attribution ? `<p class="text-xs text-stone-500 italic">Contributed by ${escapeHtml(attribution)}</p>` : ''}
+      </article>`;
+    }
+
+    function renderToolTipsBlock({ id, label, categories }) {
+      const container = document.getElementById(id);
+      if (!container) return;
+      const catsLower = categories.map(c => c.toLowerCase());
+      const matches = tipsState.all.filter(r => {
+        const c = (r['What kind of tip is this?'] || '').trim().toLowerCase();
+        return c && catsLower.includes(c);
+      });
+      const header = `<div class="text-xs font-bold uppercase tracking-widest text-stone-500 mb-3 pt-6 border-t border-stone-200">Tips from FLS Educators · ${escapeHtml(label)}</div>`;
+      if (!matches.length) {
+        container.innerHTML = `${header}<p class="text-sm text-stone-500 italic">No tips yet — <a href="https://forms.gle/FrgKBrdodY2bLnMR6" target="_blank" rel="noopener" class="text-[#002f60] hover:text-[#e47727] underline font-semibold">share the first one →</a></p>`;
+        return;
+      }
+      const shown = matches.slice(0, 3);
+      const remaining = Math.max(0, matches.length - 3);
+      container.innerHTML = `${header}
+        <div class="grid sm:grid-cols-2 gap-3">${shown.map(toolTipCompact).join('')}</div>
+        ${remaining > 0 ? `<p class="text-xs text-stone-500 italic mt-4"><a href="#fls-tips" class="text-[#002f60] hover:text-[#e47727] underline font-semibold">See ${remaining} more ${label} tip${remaining === 1 ? '' : 's'} in All Tips →</a></p>` : ''}`;
+    }
+
+    function renderAllToolTipsBlocks() {
+      TOOL_FAMILIES.forEach(renderToolTipsBlock);
+    }
+
     function loadTips() {
       Papa.parse(CSV_URL, {
         download: true,
@@ -543,6 +607,7 @@
           tipsState.all = approved;
           renderTipFilters();
           renderTipsList();
+          renderAllToolTipsBlocks();
 
           const searchEl = document.getElementById('tipSearch');
           searchEl.addEventListener('input', (e) => {
