@@ -399,8 +399,28 @@
       const attribution = contributor
         ? (school ? `${contributor} · ${school}` : contributor)
         : '';
-      const isVideo = isVideoUrl(link);
-      const isYouTubeLM = /youtube\.com\/watch|youtu\.be\//.test(learnMore);
+      const isUrl = (s) => /^https?:\/\//i.test((s || '').trim());
+      // If the contributor didn't provide a link, fall back to the tool's canonical URL by category.
+      const CATEGORY_DEFAULT_URLS = {
+        'claude for teachers': 'https://claude.com/solutions/teachers',
+        'chatgpt for teachers': 'https://chatgpt.com',
+        'gmail': 'https://mail.google.com',
+        'docs': 'https://docs.google.com',
+        'sheets': 'https://sheets.google.com',
+        'slides': 'https://slides.google.com',
+        'meet': 'https://meet.google.com',
+        'vids': 'https://vids.google.com',
+        'forms': 'https://forms.google.com',
+        'gemini': 'https://gemini.google.com',
+        'gemini notebook': 'https://notebooklm.google.com',
+        'coursemojo': 'https://coursemojo.com',
+        'playlab': 'https://www.playlab.ai',
+      };
+      const effectiveLink = isUrl(link) ? link : (CATEGORY_DEFAULT_URLS[(category || '').toLowerCase()] || '');
+      const linkOk = isUrl(effectiveLink);
+      const learnMoreOk = isUrl(learnMore);
+      const isVideo = linkOk && isVideoUrl(effectiveLink);
+      const isYouTubeLM = learnMoreOk && /youtube\.com\/watch|youtu\.be\//.test(learnMore);
       const featured = !!(row['Featured Date'] || '').trim();
       const tsMs = Date.parse(row.Timestamp || '');
       const isNew = !isNaN(tsMs) && (Date.now() - tsMs) < 7 * 24 * 60 * 60 * 1000;
@@ -438,7 +458,7 @@
               ${attribution ? `<p class="text-xs text-stone-500 italic mb-3">Contributed by ${escapeHtml(attribution)}</p>` : ''}
               ${isVideo ? `
                 <div class="aspect-video max-w-2xl rounded-lg overflow-hidden border border-stone-200 mb-4 bg-stone-100">
-                  <iframe src="${videoEmbedUrl(link)}" class="w-full h-full" allow="autoplay; encrypted-media" allowfullscreen title="${escapeHtml(title)}"></iframe>
+                  <iframe src="${videoEmbedUrl(effectiveLink)}" class="w-full h-full" allow="autoplay; encrypted-media" allowfullscreen title="${escapeHtml(title)}"></iframe>
                 </div>
               ` : ''}
               ${steps.length ? `
@@ -453,10 +473,10 @@
                   <button type="button" onclick="copyCode(this)" data-code="${escapeHtml(code)}" class="bg-[#002f60] hover:bg-[#001f40] text-white px-3 py-1 rounded transition text-xs shrink-0 whitespace-nowrap">Copy</button>
                 </div>
               ` : ''}
-              ${(link && !isVideo) || learnMore ? `
+              ${(linkOk && !isVideo) || learnMoreOk ? `
                 <div class="flex flex-wrap gap-3 mb-3 text-sm">
-                  ${(link && !isVideo) ? `<a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 px-3 py-1.5 border border-[#002f60] text-[#002f60] hover:bg-[#002f60] hover:text-white rounded font-semibold transition">🔗 Open the tool ↗</a>` : ''}
-                  ${learnMore ? `<a href="${escapeHtml(learnMore)}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 px-3 py-1.5 border border-[#e47727] text-[#e47727] hover:bg-[#e47727] hover:text-white rounded font-semibold transition">${isYouTubeLM ? '📺 Watch tutorial' : '📖 Learn more'} →</a>` : ''}
+                  ${(linkOk && !isVideo) ? `<a href="${escapeHtml(effectiveLink)}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 px-3 py-1.5 border border-[#002f60] text-[#002f60] hover:bg-[#002f60] hover:text-white rounded font-semibold transition">🔗 Open the tool ↗</a>` : ''}
+                  ${learnMoreOk ? `<a href="${escapeHtml(learnMore)}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 px-3 py-1.5 border border-[#e47727] text-[#e47727] hover:bg-[#e47727] hover:text-white rounded font-semibold transition">${isYouTubeLM ? '📺 Watch tutorial' : '📖 Learn more'} →</a>` : ''}
                 </div>
               ` : ''}
               ${(row['Community Quote'] || '').trim() ? `
