@@ -362,6 +362,26 @@
       return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
+    // Escape text safely AND turn http(s) URLs into clickable navy links.
+    // Splits on URL matches so unicode + punctuation in the surrounding text stay escaped.
+    function linkify(text) {
+      if (!text) return '';
+      const s = String(text);
+      const re = /(https?:\/\/[^\s<>"')]+)/g;
+      const parts = [];
+      let last = 0, m;
+      while ((m = re.exec(s)) !== null) {
+        if (m.index > last) parts.push(escapeHtml(s.slice(last, m.index)));
+        const url = m[0].replace(/[.,;:!?)]+$/, '');   // trim trailing punctuation
+        const trailing = m[0].slice(url.length);
+        parts.push(`<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="text-[#002f60] hover:text-[#e47727] underline">${escapeHtml(url)}</a>`);
+        if (trailing) parts.push(escapeHtml(trailing));
+        last = m.index + m[0].length;
+      }
+      if (last < s.length) parts.push(escapeHtml(s.slice(last)));
+      return parts.join('');
+    }
+
     function parseSteps(text) {
       if (!text) return [];
       let lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
@@ -419,6 +439,7 @@
         'forms': 'https://forms.google.com',
         'gemini': 'https://gemini.google.com',
         'gemini notebook': 'https://notebooklm.google.com',
+        'classroom': 'https://classroom.google.com',
         'coursemojo': 'https://coursemojo.com',
         'playlab': 'https://www.playlab.ai',
       };
@@ -431,7 +452,7 @@
       const tsMs = Date.parse(row.Timestamp || '');
       const isNew = !isNaN(tsMs) && (Date.now() - tsMs) < 7 * 24 * 60 * 60 * 1000;
       // Tools officially approved by FLS. Everything else gets a "Third-party" badge for transparency.
-      const APPROVED = ['Gmail','Docs','Sheets','Slides','Meet','Vids','Forms','Gemini','Gemini Notebook','AI Prompt','Coursemojo','PlayLab','Claude','Claude Enterprise','Claude for Teachers','ChatGPT for Teachers'];
+      const APPROVED = ['Gmail','Docs','Sheets','Slides','Meet','Vids','Forms','Classroom','Gemini','Gemini Notebook','AI Prompt','Coursemojo','PlayLab','Claude','Claude Enterprise','Claude for Teachers','ChatGPT for Teachers'];
       const isThirdParty = category && !APPROVED.some(a => a.toLowerCase() === category.toLowerCase());
       const newsletterSent = (row['Newsletter Date'] || row['Newsletter Sent Date'] || '').trim();
       const newsletterSentMs = Date.parse(newsletterSent || '');
@@ -461,7 +482,7 @@
               </div>
             </summary>
             <div class="px-4 pb-4 pt-2 border-t border-stone-100">
-              <p class="tip-desc text-sm text-stone-700 leading-relaxed mb-3">${escapeHtml(description)}</p>
+              <p class="tip-desc text-sm text-stone-700 leading-relaxed mb-3">${linkify(description)}</p>
               ${attribution ? `<p class="text-sm font-semibold text-[#002f60] mb-4 pb-3 border-b border-stone-100">✍️ Contributed by ${escapeHtml(attribution)}</p>` : ''}
               ${isVideo ? `
                 <div class="aspect-video max-w-2xl rounded-lg overflow-hidden border border-stone-200 mb-4 bg-stone-100">
@@ -471,7 +492,7 @@
               ${steps.length ? `
                 <p class="text-sm font-bold text-[#002f60] uppercase tracking-wider mt-4 mb-3 text-[11px]">How to do it</p>
                 <ol class="list-decimal ml-6 pl-1 space-y-2.5 text-sm text-stone-700 marker:text-[#e47727] marker:font-bold marker:text-base leading-relaxed mb-4">
-                  ${steps.map(s => `<li>${escapeHtml(s)}</li>`).join('')}
+                  ${steps.map(s => `<li>${linkify(s)}</li>`).join('')}
                 </ol>
               ` : ''}
               ${code ? `
@@ -553,7 +574,7 @@
 
     // Tool -> categories mapping. Google Workspace aggregates its sub-products.
     const TOOL_FAMILIES = [
-      { id: 'tips-google',    label: 'Google Workspace',    categories: ['Gmail','Docs','Sheets','Slides','Meet','Vids','Forms','Gemini','Gemini Notebook','AI Prompt'] },
+      { id: 'tips-google',    label: 'Google Workspace',    categories: ['Gmail','Docs','Sheets','Slides','Meet','Vids','Forms','Classroom','Gemini','Gemini Notebook','AI Prompt'] },
       { id: 'tips-claude',    label: 'Claude (Enterprise)', categories: ['Claude','Claude Enterprise','Claude for Teachers'] },
       { id: 'tips-chatgpt',   label: 'ChatGPT for Teachers',categories: ['ChatGPT for Teachers'] },
       { id: 'tips-coursemojo',label: 'Coursemojo',          categories: ['Coursemojo'] },
@@ -576,7 +597,7 @@
           <span class="text-stone-500">Tip #${String(num).padStart(3,'0')}</span>
         </div>
         <a href="#${id}" class="text-base font-bold text-[#002f60] hover:text-[#e47727] leading-snug">${escapeHtml(title)}</a>
-        ${desc ? `<p class="text-sm text-stone-700 leading-relaxed mt-1 mb-2">${escapeHtml(desc)}</p>` : ''}
+        ${desc ? `<p class="text-sm text-stone-700 leading-relaxed mt-1 mb-2">${linkify(desc)}</p>` : ''}
         ${attribution ? `<p class="text-xs font-semibold text-[#002f60] mt-2">✍️ Contributed by ${escapeHtml(attribution)}</p>` : ''}
       </article>`;
     }
